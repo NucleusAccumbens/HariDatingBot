@@ -26,7 +26,7 @@ public class CommandAnalyzer : ICommandAnalyzer
     public async Task AnalyzeCommandsAsync(ITelegramBotClient client, Update update)
     {
         try
-        {
+        {           
             if (update.Type == UpdateType.MyChatMember && update.MyChatMember != null)
             {
                 //await _kickTlgUserCommand.ManageTlgUserKickingAsync(update.MyChatMember.Chat.Id);

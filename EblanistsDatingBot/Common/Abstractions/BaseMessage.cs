@@ -26,4 +26,10 @@ public abstract class BaseMessage
             .EditMessage(chatId, messageId, client, MessageText, InlineKeyboardMarkup);
     }
 
+    public virtual async Task EditMediaMessage(long chatId, int messageId, ITelegramBotClient client, string path)
+    {
+        await MessageService
+            .EditMediaMessage(chatId, messageId, client, path, InlineKeyboardMarkup);
+    }
+
 }

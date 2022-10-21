@@ -25,7 +25,16 @@ public class ProfileCallbackCommand : BaseCallbackCommand
 
             var user = await _getDatingUserQuery.GetDatingUserAsync(chatId);
 
-            if (user != null) _profileMessage = new(user.Adapt<DatingUserDto>());
+            if (update.CallbackQuery.Data == "oProfile_")
+            {
+                if (user != null) _profileMessage = new(user.Adapt<DatingUserDto>(), true);
+
+                await _profileMessage.EditMessage(chatId, messageId, client);
+
+                return;
+            }
+
+            if (user != null) _profileMessage = new(user.Adapt<DatingUserDto>(), false);
 
             await _profileMessage.EditMessage(chatId, messageId, client);
         }

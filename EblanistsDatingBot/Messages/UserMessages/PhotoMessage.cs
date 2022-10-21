@@ -8,7 +8,6 @@ public class PhotoMessage : BaseMessage
         "and also invite you to show yourself in full growth from different angles\n\n" +
         "🔸 a portrait photo is best taken without makeup, but this is only a recommendation, not a rule\n\n" +
         "🔸 photos should be of good quality: not too dark and not overexposed\n\n" +
-        "🔸 you can add up to eight photos - one photo of each type\n\n" +
         "🔸 you can delete photos\n\n" + 
         "🔸 nude photos allowed\n\n" +
         "click on the button to choose which photo you are going to upload. " +

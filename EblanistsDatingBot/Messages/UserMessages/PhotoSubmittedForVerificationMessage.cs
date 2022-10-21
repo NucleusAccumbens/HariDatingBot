@@ -14,7 +14,7 @@ public class PhotoSubmittedForVerificationMessage : BaseMessage
         },
         new[]
         {
-            InlineKeyboardButton.WithCallbackData(text: "🔘 profile", callbackData: $"oProfile")
+            InlineKeyboardButton.WithCallbackData(text: "🔘 profile", callbackData: $"oProfile_")
         },
     });
 }

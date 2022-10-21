@@ -4,6 +4,8 @@ namespace EblanistsDatingBot.Messages.UserMessages;
 
 public class ProfileMessage : BaseMessage
 {
+    private readonly bool _isTextCommand;
+    
     private readonly string _progressBarToThirtyPercent =
         "🔴🔴🔴⚫️⚫️⚫️⚫️⚫️⚫️⚫️ 30%";
 
@@ -20,10 +22,11 @@ public class ProfileMessage : BaseMessage
 
     private readonly DatingUserDto _userDto;
 
-    public ProfileMessage(DatingUserDto datingUserDto)
+    public ProfileMessage(DatingUserDto datingUserDto, bool isTextCommand)
     {
         _userDto = datingUserDto;
         _stringBuilder = new(_userDto);
+        _isTextCommand = isTextCommand;
     }
 
     public override string MessageText => 
@@ -54,7 +57,30 @@ public class ProfileMessage : BaseMessage
 
         else progressBar += String.Empty;
 
-        return new(new[]
+        if (_isTextCommand == true)
+        {
+            return new(new[]
+            {
+                new[]
+                {
+                    InlineKeyboardButton.WithCallbackData(text: $"{progressBar}", callbackData: "}")
+                },
+                new[]
+                {
+                    InlineKeyboardButton.WithCallbackData(text: "🔘 view photos  ", callbackData: $"uViewPhotos"),
+                },
+                new[]
+                {
+                    InlineKeyboardButton.WithCallbackData(text: "🔘 pass the test", callbackData: $"qStiTest")
+                },
+                new[]
+                {
+                    InlineKeyboardButton.WithCallbackData(text: "🔘 edit profile  ", callbackData: $"pEditProfile"),
+                },
+            });
+        }
+
+        else return new(new[]
         {
             new[]
             {

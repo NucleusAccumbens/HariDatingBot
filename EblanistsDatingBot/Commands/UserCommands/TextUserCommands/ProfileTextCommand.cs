@@ -26,7 +26,7 @@ public class ProfileTextCommand : BaseTextCommand
 
             if (user != null)
             {
-                _profileMessage = new(user.Adapt<DatingUserDto>());
+                _profileMessage = new(user.Adapt<DatingUserDto>(), true);
 
                 await _profileMessage.SendMessage(chatId, client);
             }           

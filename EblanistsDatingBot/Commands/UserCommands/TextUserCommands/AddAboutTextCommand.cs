@@ -48,7 +48,7 @@ public class AddAboutTextCommand : BaseTextCommand
 
                     var user = await _getDatingUserQuery.GetDatingUserAsync(chatId);
                     
-                    if (user != null ) _profileMessage = new(user.Adapt<DatingUserDto>());
+                    if (user != null ) _profileMessage = new(user.Adapt<DatingUserDto>(), true);
 
                     _memoryCachService.SetMemoryCach(chatId, String.Empty, 0);
 

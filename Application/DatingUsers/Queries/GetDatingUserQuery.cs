@@ -13,6 +13,12 @@ public class GetDatingUserQuery : IGetDatingUserQuery
         _context = context;
     }
 
+    public async Task<List<DatingUser>> GetAllDatingUsersAsync()
+    {
+        return await _context.DatingUsers
+            .ToListAsync();
+    }
+
     public async Task<DatingUser?> GetDatingUserAsync(long chatId)
     {
         return await _context.DatingUsers

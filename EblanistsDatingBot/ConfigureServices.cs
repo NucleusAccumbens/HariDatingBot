@@ -24,6 +24,7 @@ public static class ConfigureService
         services.AddScoped<BaseTextCommand, PhotoTextCommand>();
         services.AddScoped<BaseTextCommand, ProfileTextCommand>();
         services.AddScoped<BaseTextCommand, ViewPhotosTextCommand>();
+        services.AddScoped<BaseTextCommand, DatingTextCommand>();
         services.AddScoped<BaseCallbackCommand, RegisterCallbackCommand>();
         services.AddScoped<BaseCallbackCommand, VeganCallbackCommand>();
         services.AddScoped<BaseCallbackCommand, NoncredistCallbackCommand>();
@@ -47,6 +48,10 @@ public static class ConfigureService
         services.AddScoped<BaseCallbackCommand, VerifidePhotoCallbackCommand>();
         services.AddScoped<BaseCallbackCommand, ViewPhotosCallbackCommand>();
         services.AddScoped<BaseCallbackCommand, ManagePhotoCallbackCommand>();
+        services.AddScoped<BaseCallbackCommand, DatingCallbackCommand>();
+        services.AddScoped<BaseCallbackCommand, StartDatingCallbackCommandcs>();
+        services.AddScoped<BaseCallbackCommand, PhotoForDatingCallbackCommand>();
+        services.AddScoped<BaseCallbackCommand, RequestAChatCallbackCommand>();
 
         return services;
     }

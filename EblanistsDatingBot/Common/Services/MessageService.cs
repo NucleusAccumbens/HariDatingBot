@@ -1,4 +1,6 @@
-﻿namespace EblanistsDatingBot.Common.Services;
+﻿using Telegram.Bot;
+
+namespace EblanistsDatingBot.Common.Services;
 
 public class MessageService
 {
@@ -39,6 +41,16 @@ public class MessageService
             messageId: messageId,
             text: text,
             parseMode: ParseMode.Html,
+            replyMarkup: inlineKeyboardMarkup);
+    }
+
+    public static async Task EditMediaMessage(long chatId, int messageId, ITelegramBotClient client,
+        string path, InlineKeyboardMarkup? inlineKeyboardMarkup)
+    {
+        await client.EditMessageMediaAsync(
+            chatId: chatId,
+            messageId: messageId,
+            media: new InputMediaPhoto(new InputMedia(path)),
             replyMarkup: inlineKeyboardMarkup);
     }
 

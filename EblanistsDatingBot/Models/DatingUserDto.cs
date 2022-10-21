@@ -2,6 +2,7 @@
 
 public class DatingUserDto
 {
+    public long? Id { get; set; }
     public long ChatId { get; set; }
     public bool? IsVegan { get; set; }
     public bool? IsBeliever { get; set; }
