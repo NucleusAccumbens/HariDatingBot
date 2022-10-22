@@ -45,9 +45,9 @@ public class DatingBotDbCotext : DbContext, IDatingBotDbContext
         optionsBuilder.AddInterceptors(_auditableEntitySaveChangesInterceptor);
     }
 
-    public async Task<int> SaveChangesAsync()
+    public async Task SaveChangesAsync()
     {
-        return await base.SaveChangesAsync();
+        await base.SaveChangesAsync();
     }
 
 }

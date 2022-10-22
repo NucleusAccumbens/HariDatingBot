@@ -10,6 +10,6 @@ namespace Application.Common.Interfaces
 
         DbSet<Photo> Photos { get; }
 
-        Task<int> SaveChangesAsync();
+        Task SaveChangesAsync();
     }
 }

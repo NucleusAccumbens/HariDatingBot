@@ -21,7 +21,7 @@ public class EditProfileMessage : BaseMessage
         },
         new[]
         {
-            InlineKeyboardButton.WithCallbackData(text: "🔙 back", callbackData: $"o")
+            InlineKeyboardButton.WithCallbackData(text: "🔙 back", callbackData: $"oProfile_")
         },
     });
 }

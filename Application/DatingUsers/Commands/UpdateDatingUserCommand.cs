@@ -12,6 +12,19 @@ public class UpdateDatingUserCommand : IUpdateDatingUserCommand
         _context = context;
     }
 
+    public async Task AddRequestAsync(long chatId, Request request)
+    {
+        var entity = await _context.DatingUsers
+            .SingleOrDefaultAsync(u => u.ChatId == chatId);
+
+        if (entity != null)
+        {
+            entity.Requests.Add(request);
+
+            await _context.SaveChangesAsync();
+        }
+    }
+
     public async Task UpdateDatingUserHasAPhotoAsync(long chatId)
     {
         var entity = await _context.DatingUsers

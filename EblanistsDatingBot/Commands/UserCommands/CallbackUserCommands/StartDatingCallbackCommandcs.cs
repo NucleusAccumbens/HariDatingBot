@@ -20,12 +20,15 @@ public class StartDatingCallbackCommandcs : BaseCallbackCommand
 
     private readonly IGetPhotosQuery _getPhotosQuery;
 
+    private readonly IUpdateDatingUserCommand _updateDatingUserCommand;
+
     public StartDatingCallbackCommandcs(IGetDatingUserQuery datingUserQuery, IMemoryCachService memoryCachService,
-        IGetPhotosQuery getPhotosQuery)
+        IGetPhotosQuery getPhotosQuery, IUpdateDatingUserCommand updateDatingUserCommand)
     {
         _getDatingUserQuery = datingUserQuery;
         _memoryCachService = memoryCachService;
         _getPhotosQuery = getPhotosQuery;
+        _updateDatingUserCommand = updateDatingUserCommand;
     }
 
     public override char CallbackDataCode => 'w';
@@ -95,6 +98,10 @@ public class StartDatingCallbackCommandcs : BaseCallbackCommand
                         user != null && chatIdOfCompletedRequests != null && !chatIdOfCompletedRequests.Contains(user.ChatId))
                     {
                         _chatMessage = new(user.Adapt<DatingUserDto>(), chatId, false);
+
+                        var request = new Request() { ChatId = chatId };
+
+                        await _updateDatingUserCommand.AddRequestAsync(GetUserChatIdToWriteMessage(data), request);
 
                         await _chatMessage.SendMessage(GetUserChatIdToWriteMessage(data), client);
 

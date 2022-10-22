@@ -8,4 +8,7 @@ public interface IUpdateDatingUserCommand
 
     Task UpdateDatingUserHasAPhotoAsync(long chatId);
 
+    Task AddRequestAsync(long chatId, Request request);
+
+
 }
