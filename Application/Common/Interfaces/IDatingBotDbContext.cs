@@ -1,15 +1,14 @@
-﻿using Domain.Entities;
+﻿namespace Application.Common.Interfaces;
 
-namespace Application.Common.Interfaces
+public interface IDatingBotDbContext 
 {
-    public interface IDatingBotDbContext 
-    {
-        DbSet<DatingUser> DatingUsers { get; } 
+    DbSet<DatingUser> DatingUsers { get; } 
 
-        DbSet<TlgUser> TlgUsers { get; }
+    DbSet<TlgUser> TlgUsers { get; }
 
-        DbSet<Photo> Photos { get; }
+    DbSet<Photo> Photos { get; }
 
-        Task SaveChangesAsync();
-    }
+    DbSet<Request> Requests { get; }
+
+    Task SaveChangesAsync();
 }

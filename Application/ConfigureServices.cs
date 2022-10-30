@@ -4,6 +4,8 @@ using Application.DatingUsers.Queries;
 using Application.Photos.Commands;
 using Application.Photos.Interfaces;
 using Application.Photos.Queries;
+using Application.Requests.Commands;
+using Application.Requests.Interfaces;
 using Application.TlgUsers.Commands;
 using Application.TlgUsers.Interfaces;
 using Application.TlgUsers.Queries;
@@ -26,6 +28,7 @@ public static class ConfigureServices
         services.AddScoped<IUpdatePhotoCommand, UpdatePhotoCommand>();
         services.AddScoped<ICheckUserHasPhotosQuery, CheckUserHasPhotosQuery>();
         services.AddScoped<IGetPhotosQuery, GetPhotosQuery>();
+        services.AddScoped<ICreateRequestCommand, CreateRequestCommand>();
 
         return services;
     }

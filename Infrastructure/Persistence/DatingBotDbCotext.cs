@@ -24,6 +24,8 @@ public class DatingBotDbCotext : DbContext, IDatingBotDbContext
 
     public DbSet<Photo> Photos => Set<Photo>();
 
+    public DbSet<Request> Requests => Set<Request>();
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());

@@ -1,6 +1,8 @@
 ﻿using Application.Photos.Interfaces;
+using Application.Requests.Interfaces;
 using EblanistsDatingBot.Common.Services;
 using EblanistsDatingBot.Messages.UserMessages;
+using Telegram.Bot.Types;
 
 namespace EblanistsDatingBot.Commands.UserCommands.CallbackUserCommands;
 
@@ -22,13 +24,16 @@ public class StartDatingCallbackCommandcs : BaseCallbackCommand
 
     private readonly IUpdateDatingUserCommand _updateDatingUserCommand;
 
+    private readonly ICreateRequestCommand _createRequestCommand;
+
     public StartDatingCallbackCommandcs(IGetDatingUserQuery datingUserQuery, IMemoryCachService memoryCachService,
-        IGetPhotosQuery getPhotosQuery, IUpdateDatingUserCommand updateDatingUserCommand)
+        IGetPhotosQuery getPhotosQuery, IUpdateDatingUserCommand updateDatingUserCommand, ICreateRequestCommand createRequestCommand)
     {
         _getDatingUserQuery = datingUserQuery;
         _memoryCachService = memoryCachService;
         _getPhotosQuery = getPhotosQuery;
         _updateDatingUserCommand = updateDatingUserCommand;
+        _createRequestCommand = createRequestCommand;
     }
 
     public override char CallbackDataCode => 'w';
@@ -99,7 +104,7 @@ public class StartDatingCallbackCommandcs : BaseCallbackCommand
                     {
                         _chatMessage = new(user.Adapt<DatingUserDto>(), chatId, false);
 
-                        var request = new Request() { ChatId = chatId };
+                        var request = await CreateRequest(chatId, user);
 
                         await _updateDatingUserCommand.AddRequestAsync(GetUserChatIdToWriteMessage(data), request);
 
@@ -129,5 +134,14 @@ public class StartDatingCallbackCommandcs : BaseCallbackCommand
     private static long GetUserChatIdToWriteMessage(string data)
     {
         return Convert.ToInt64(data[13..]);
+    }
+
+    private async Task<Request> CreateRequest(long chatId, DatingUser user)
+    {
+        var request = new Request() { ChatId = chatId, UserId = user.Id, DatingUser = user };
+
+        await _createRequestCommand.CreateRequestAsync(request);
+
+        return request;
     }
 }

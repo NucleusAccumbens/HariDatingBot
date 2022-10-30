@@ -15,12 +15,12 @@ public static class ConfigureService
 
         if (configuration.GetValue<bool>("InDeveloping"))
         {
-            services.AddDbContext<DatingBotDbCotext>(options =>
-            options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<DatingBotDbCotext>(optionBuilder =>
+            optionBuilder.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
         }
         else
         {
-
+            
         }
 
         services.AddScoped<IDatingBotDbContext>(provider => 

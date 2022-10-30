@@ -22,7 +22,10 @@ public class RequestAChatMessage : BaseMessage
 
     public override string MessageText =>
         $"<b>this person wants to start a dialogue with you. " +
-        $"you can only chat with one person at a time</b>\n\n" +
+        $"you can only chat with one person at a time. " +
+        $"you can go to the dialogue at any time, " +
+        $"the application is saved. to view the application, " +
+        $"use the command /requests</b>\n\n" +
         $"{_stringBuilder.GetProfileInfo()}";
 
     public override InlineKeyboardMarkup InlineKeyboardMarkup => GetInlineKeyboardMarkup(_chatId);
