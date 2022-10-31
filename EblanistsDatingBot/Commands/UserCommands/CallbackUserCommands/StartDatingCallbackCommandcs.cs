@@ -113,7 +113,7 @@ public class StartDatingCallbackCommandcs : BaseCallbackCommand
                     var user = await _getDatingUserQuery.GetDatingUserAsync(chatId);
 
                     var chatIdOfCompletedRequests = _memoryCachService
-                        .GetChatIdOfCompletedRequestsFromMemoryCach(GetUserChatIdToRequest(data));
+                        .GetChatIdOfCompletedRequestsFromMemoryCach(chatId);
 
                     bool isBlocked = await _checkDatingUserIsBlockedQuery
                         .CheckDatingUserIsBlockedAsync(chatId, GetUserChatIdToRequest(data));
@@ -127,7 +127,7 @@ public class StartDatingCallbackCommandcs : BaseCallbackCommand
                     }
 
                     if (user != null && chatIdOfCompletedRequests == null || 
-                        user != null && chatIdOfCompletedRequests != null && !chatIdOfCompletedRequests.Contains(user.ChatId))
+                        user != null && chatIdOfCompletedRequests != null && !chatIdOfCompletedRequests.Contains(GetUserChatIdToRequest(data)))
                     {
                         bool canRequested = _memoryCachService.SetRequestCountInMemoryCach(chatId);
 
@@ -139,7 +139,7 @@ public class StartDatingCallbackCommandcs : BaseCallbackCommand
 
                             await _chatMessage.SendMessage(GetUserChatIdToRequest(data), client);
 
-                            _memoryCachService.SetMemoryCach(chatId, user.ChatId);
+                            _memoryCachService.SetMemoryCach(chatId, GetUserChatIdToRequest(data));
 
                             await MessageService.ShowAllert(callbackId, client, "application sent");
                         }

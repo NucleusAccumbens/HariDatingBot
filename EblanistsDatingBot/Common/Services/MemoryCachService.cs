@@ -1,5 +1,4 @@
-﻿using EblanistsDatingBot.Models;
-using Microsoft.Extensions.Caching.Memory;
+﻿using Microsoft.Extensions.Caching.Memory;
 
 namespace EblanistsDatingBot.Common.Services;
 
@@ -149,12 +148,25 @@ public class MemoryCachService : IMemoryCachService
 
     public List<long>? GetChatIdOfCompletedRequestsFromMemoryCach(long chatId)
     {
+
         if (_memoryCach.Get(chatId + 10) is not null and List<long>)
         {
+            var requests = (List<long>)_memoryCach.Get(chatId + 10);
+
             return (List<long>)_memoryCach.Get(chatId + 10);
         }
 
         else return null;
+    }
+
+    public long GetInterlocutorChatIdFromMemoryCach(long chatId)
+    {
+        if (_memoryCach.Get(chatId + 12) is not null and long)
+        {
+            return (long)_memoryCach.Get(chatId + 12);
+        }
+
+        else throw new MemoryCachException();
     }
 
     public void SetMemoryCach(long chatId, DatingUserDto datingUserDto)
@@ -301,6 +313,33 @@ public class MemoryCachService : IMemoryCachService
             new MemoryCacheEntryOptions
             {
                 AbsoluteExpirationRelativeToNow = TimeSpan.FromDays(1)
+            });
+    }
+
+    public void SetInterlocutorChatIdInMemoryCach(long chatId, long interlocutorChatId)
+    {
+        _memoryCach.Set(chatId + 2, "chating",
+            new MemoryCacheEntryOptions
+            {
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromDays(365)
+            });
+
+        _memoryCach.Set(interlocutorChatId + 2, "chating",
+            new MemoryCacheEntryOptions
+            {
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromDays(365)
+            });
+
+        _memoryCach.Set(chatId + 12, interlocutorChatId,
+            new MemoryCacheEntryOptions
+            {
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromDays(365)
+            });
+
+        _memoryCach.Set(interlocutorChatId + 12, chatId,
+            new MemoryCacheEntryOptions
+            {
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromDays(365)
             });
     }
 }

@@ -6,6 +6,8 @@ namespace EblanistsDatingBot.Commands.UserCommands.CallbackUserCommands;
 public class RequestAChatCallbackCommand : BaseCallbackCommand
 {
     private RequestAChatMessage _requestAChatMessage;
+
+    private readonly ChatMessage _chatMessage = new();
     
     private readonly IMemoryCachService _memoryCachService;
 
@@ -34,7 +36,6 @@ public class RequestAChatCallbackCommand : BaseCallbackCommand
             string data = update.CallbackQuery.Data;
 
             string callbackId = update.CallbackQuery.Id;
-
 
             try
             {
@@ -76,7 +77,9 @@ public class RequestAChatCallbackCommand : BaseCallbackCommand
                 }
                 if (data.Contains("ySendAMessage"))
                 {
+                    _memoryCachService.SetInterlocutorChatIdInMemoryCach(chatId, GetChatIdForSendMessage(data));
 
+                    await _chatMessage.EditMessage(chatId, messageId, client);
                 }
             }
             catch (MemoryCachException ex)
@@ -94,5 +97,10 @@ public class RequestAChatCallbackCommand : BaseCallbackCommand
     private long GetChatIdForUnlockUser(string data)
     {
         return Convert.ToInt64(data[7..]);
+    }
+
+    private long GetChatIdForSendMessage(string data)
+    {
+        return Convert.ToInt64(data[13..]);
     }
 }
