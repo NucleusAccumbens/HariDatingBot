@@ -1,6 +1,4 @@
 ﻿using Application.DatingUsers.Interfaces;
-using Domain.Entities;
-using Microsoft.VisualBasic;
 
 namespace Application.DatingUsers.Queries;
 

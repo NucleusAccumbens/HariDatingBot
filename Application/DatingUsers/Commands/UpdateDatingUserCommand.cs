@@ -15,7 +15,7 @@ public class UpdateDatingUserCommand : IUpdateDatingUserCommand
     public async Task AddRequestAsync(long chatId, Request request)
     {
         var entity = await _context.DatingUsers
-            .SingleOrDefaultAsync(u => u.ChatId == chatId);
+                .SingleOrDefaultAsync(u => u.ChatId == chatId);
 
         if (entity != null)
         {

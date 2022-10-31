@@ -1,8 +1,7 @@
-﻿using Application.Photos.Interfaces;
+using Application.Photos.Interfaces;
 using Application.Requests.Interfaces;
 using EblanistsDatingBot.Common.Services;
 using EblanistsDatingBot.Messages.UserMessages;
-using Telegram.Bot.Types;
 
 namespace EblanistsDatingBot.Commands.UserCommands.CallbackUserCommands;
 
@@ -22,17 +21,14 @@ public class StartDatingCallbackCommandcs : BaseCallbackCommand
 
     private readonly IGetPhotosQuery _getPhotosQuery;
 
-    private readonly IUpdateDatingUserCommand _updateDatingUserCommand;
-
     private readonly ICreateRequestCommand _createRequestCommand;
 
     public StartDatingCallbackCommandcs(IGetDatingUserQuery datingUserQuery, IMemoryCachService memoryCachService,
-        IGetPhotosQuery getPhotosQuery, IUpdateDatingUserCommand updateDatingUserCommand, ICreateRequestCommand createRequestCommand)
+        IGetPhotosQuery getPhotosQuery, ICreateRequestCommand createRequestCommand)
     {
         _getDatingUserQuery = datingUserQuery;
         _memoryCachService = memoryCachService;
         _getPhotosQuery = getPhotosQuery;
-        _updateDatingUserCommand = updateDatingUserCommand;
         _createRequestCommand = createRequestCommand;
     }
 
@@ -104,11 +100,9 @@ public class StartDatingCallbackCommandcs : BaseCallbackCommand
                     {
                         _chatMessage = new(user.Adapt<DatingUserDto>(), chatId, false);
 
-                        var request = await CreateRequest(chatId, user);
+                        var request = await CreateRequest(GetUserChatIdToRequest(data), user);
 
-                        await _updateDatingUserCommand.AddRequestAsync(GetUserChatIdToWriteMessage(data), request);
-
-                        await _chatMessage.SendMessage(GetUserChatIdToWriteMessage(data), client);
+                        await _chatMessage.SendMessage(GetUserChatIdToRequest(data), client);
 
                         _memoryCachService.SetMemoryCach(chatId, user.ChatId);
 
@@ -131,14 +125,14 @@ public class StartDatingCallbackCommandcs : BaseCallbackCommand
         return Convert.ToInt64(data[11..]);
     }
 
-    private static long GetUserChatIdToWriteMessage(string data)
+    private static long GetUserChatIdToRequest(string data)
     {
         return Convert.ToInt64(data[13..]);
     }
 
     private async Task<Request> CreateRequest(long chatId, DatingUser user)
     {
-        var request = new Request() { ChatId = chatId, UserId = user.Id, DatingUser = user };
+        var request = new Request() { ChatId = chatId, DatingUserId = user.Id, DatingUser = user };
 
         await _createRequestCommand.CreateRequestAsync(request);
 

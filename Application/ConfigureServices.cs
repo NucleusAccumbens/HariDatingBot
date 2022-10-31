@@ -29,6 +29,7 @@ public static class ConfigureServices
         services.AddScoped<ICheckUserHasPhotosQuery, CheckUserHasPhotosQuery>();
         services.AddScoped<IGetPhotosQuery, GetPhotosQuery>();
         services.AddScoped<ICreateRequestCommand, CreateRequestCommand>();
+        services.AddScoped<IGetDatingUserRequestsQuery, GetDatingUserRequestsQuery>();
 
         return services;
     }
