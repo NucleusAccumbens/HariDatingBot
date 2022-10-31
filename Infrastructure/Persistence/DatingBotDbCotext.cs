@@ -26,6 +26,8 @@ public class DatingBotDbCotext : DbContext, IDatingBotDbContext
 
     public DbSet<Request> Requests => Set<Request>();
 
+    public DbSet<BlockedUser> BlockedUsers => Set<BlockedUser>();
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());

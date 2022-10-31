@@ -10,5 +10,7 @@ public interface IDatingBotDbContext
 
     DbSet<Request> Requests { get; }
 
+    DbSet<BlockedUser> BlockedUsers { get; }
+
     Task SaveChangesAsync();
 }
