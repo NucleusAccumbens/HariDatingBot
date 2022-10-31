@@ -18,7 +18,6 @@ public class DatingUser : BaseAuditableEntity
     public string? OtherInfo { get; set; }
     public bool PassedTheStiTest { get; set; }
     public bool HasPhotos { get; set; } = false;
-
     public List<Request> Requests { get; set; } = new();
 }
 

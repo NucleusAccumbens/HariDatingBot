@@ -11,7 +11,9 @@ public class RequestAChatCallbackCommand : BaseCallbackCommand
 
     private readonly IGetDatingUserQuery _getDatingUserQuery;
 
-    public RequestAChatCallbackCommand(IMemoryCachService memoryCachService, IGetDatingUserQuery getDatingUserQuery)
+
+    public RequestAChatCallbackCommand(IMemoryCachService memoryCachService, 
+        IGetDatingUserQuery getDatingUserQuery)
     {
         _memoryCachService = memoryCachService;
         _getDatingUserQuery = getDatingUserQuery;
@@ -36,11 +38,12 @@ public class RequestAChatCallbackCommand : BaseCallbackCommand
             {
                 if (data.Contains("yBlock"))
                 {
-                    var user = await _getDatingUserQuery.GetDatingUserAsync(GetChatIdForBlockUser(data));
+                    var blokingUser = await _getDatingUserQuery.GetDatingUserAsync(GetChatIdForBlockUser(data));
 
-                    if (user != null)
+                    if (blokingUser != null)
                     {
-                        _requestAChatMessage = new(user.Adapt<DatingUserDto>(), user.ChatId, true);
+
+                        _requestAChatMessage = new(blokingUser.Adapt<DatingUserDto>(), blokingUser.ChatId, true);
 
                         await _requestAChatMessage.EditMessage(chatId, messageId, client);
 
