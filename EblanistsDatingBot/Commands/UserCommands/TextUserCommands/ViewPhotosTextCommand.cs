@@ -36,13 +36,26 @@ public class ViewPhotosTextCommand : BaseTextCommand
             {
                 var photos = await _getPhotosQuery.GetUserPhotosAsync(chatId);
 
-                _memoryCachService.SetMemoryCach(chatId, photos);
+                if (photos != null && photos.Count > 1)
+                {
+                    _memoryCachService.SetMemoryCach(chatId, photos);
 
-                _viewPhotoMessage = new(photos[^1].Id);
+                    _viewPhotoMessage = new(photos[^1].Id, false);
 
-                await _viewPhotoMessage.SendPhoto(chatId, client, photos[photos.Count - 1].PathToPhoto);
+                    await _viewPhotoMessage.SendPhoto(chatId, client, photos[photos.Count - 1].PathToPhoto);
 
-                return;
+                    return;
+                }
+
+                if (photos != null && photos.Count == 1)
+                {
+                    _viewPhotoMessage = new(photos[^1].Id, true);
+
+                    await _viewPhotoMessage.SendPhoto(chatId, client, photos[photos.Count - 1].PathToPhoto);
+
+                    return;
+                }
+
             }
 
             await MessageService.SendMessage(chatId, client, _allert, null);

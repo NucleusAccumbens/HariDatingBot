@@ -1,4 +1,4 @@
-using Application.BlockedUsers.Queries;
+﻿using Application.BlockedUsers.Queries;
 using Application.Photos.Interfaces;
 using Application.Requests.Interfaces;
 using EblanistsDatingBot.Common.Services;
@@ -11,6 +11,14 @@ public class StartDatingCallbackCommandcs : BaseCallbackCommand
     private RequestAChatMessage _chatMessage;
     
     private readonly string _allert = "there are no photos in this profile";
+
+    private readonly InlineKeyboardMarkup _keyboardMarkup = new(new[]
+    {
+        new[]
+        {
+            InlineKeyboardButton.WithCallbackData(text: "🔘 hide photos", callbackData: $"xHide")
+        },
+    });
 
     private readonly PhotoForDatingMessage _photoForDatingMessage = new();
 
@@ -72,6 +80,14 @@ public class StartDatingCallbackCommandcs : BaseCallbackCommand
 
                     if (photos != null && photos.Count > 0)
                     {
+                        if (photos.Count == 1)
+                        {
+                            await MessageService
+                                .SendMessage(chatId, client, String.Empty, photos[0].PathToPhoto, _keyboardMarkup);
+
+                            return;
+                        }
+                        
                         _memoryCachService.SetMemoryCach(chatId, photos);
 
                         await _photoForDatingMessage

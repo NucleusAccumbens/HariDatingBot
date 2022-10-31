@@ -32,7 +32,7 @@ public class UpdateDatingUserCommand : IUpdateDatingUserCommand
 
         if (entity != null)
         {
-            entity.HasPhotos = true;
+            entity.HasPhotos = !entity.HasPhotos;
 
             await _context.SaveChangesAsync();
         }

@@ -25,12 +25,15 @@ public class VerifidePhotoCallbackCommand : BaseCallbackCommand
 
     private readonly IUpdateDatingUserCommand _updateDatingUserCommand;
 
+    private readonly ICheckUserHasPhotosQuery _checkUserHasPhotosQuery;
+
     public VerifidePhotoCallbackCommand(IUpdatePhotoCommand updatePhotoCommand, 
-        IDeletePhotoCommand deletePhotoCommand, IUpdateDatingUserCommand updateDatingUserCommand)
+        IDeletePhotoCommand deletePhotoCommand, IUpdateDatingUserCommand updateDatingUserCommand, ICheckUserHasPhotosQuery checkUserHasPhotosQuery)
     {
         _updatePhotoCommand = updatePhotoCommand;
         _deletePhotoCommand = deletePhotoCommand;
         _updateDatingUserCommand = updateDatingUserCommand;
+        _checkUserHasPhotosQuery = checkUserHasPhotosQuery;
     }
 
     public override char CallbackDataCode => 't';
@@ -49,8 +52,12 @@ public class VerifidePhotoCallbackCommand : BaseCallbackCommand
 
             if (data.Contains("tYes"))
             {
-                await _updateDatingUserCommand
-                    .UpdateDatingUserHasAPhotoAsync(chatId);
+                bool hasPhoto = await _checkUserHasPhotosQuery.CheckUserHasPhotosAsync(chatId);
+
+                if (!hasPhoto)
+                {
+                    await _updateDatingUserCommand.UpdateDatingUserHasAPhotoAsync(chatId);
+                }                
                 
                 long userChatId = await _updatePhotoCommand
                     .UpdarePhotoIsVerifideAsync(GetPhotoIdToYes(data));

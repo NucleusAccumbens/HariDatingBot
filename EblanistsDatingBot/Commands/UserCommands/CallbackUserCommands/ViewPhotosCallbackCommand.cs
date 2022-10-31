@@ -18,13 +18,17 @@ public class ViewPhotosCallbackCommand : BaseCallbackCommand
 
     private readonly IDeletePhotoCommand _deletePhotoCommand;
 
+    private readonly IUpdateDatingUserCommand _updateDatingUserCommand;
+
     public ViewPhotosCallbackCommand(ICheckUserHasPhotosQuery checkUserHasPhotosQuery,
-        IGetPhotosQuery getPhotosQuery, IMemoryCachService memoryCachService, IDeletePhotoCommand deletePhotoCommand)
+        IGetPhotosQuery getPhotosQuery, IMemoryCachService memoryCachService, IDeletePhotoCommand deletePhotoCommand,
+        IUpdateDatingUserCommand updateDatingUserCommand)
     {
         _checkUserHasPhotosQuery = checkUserHasPhotosQuery;
         _getPhotosQuery = getPhotosQuery;
         _memoryCachService = memoryCachService;
         _deletePhotoCommand = deletePhotoCommand;
+        _updateDatingUserCommand = updateDatingUserCommand;
     }
 
     public override char CallbackDataCode => 'u';
@@ -51,9 +55,18 @@ public class ViewPhotosCallbackCommand : BaseCallbackCommand
                 {
                     var photos = await _getPhotosQuery.GetUserPhotosAsync(chatId);
 
+                    if (photos.Count == 1)
+                    {
+                        _viewPhotoMessage = new(photos[^1].Id, true);
+
+                        await _viewPhotoMessage.SendPhoto(chatId, client, photos[^1].PathToPhoto);
+
+                        return;
+                    }
+
                     _memoryCachService.SetMemoryCach(chatId, photos);
 
-                    _viewPhotoMessage = new(photos[^1].Id);
+                    _viewPhotoMessage = new(photos[^1].Id, false);
 
                     await _viewPhotoMessage.SendPhoto(chatId, client, photos[^1].PathToPhoto);
                 }
@@ -63,7 +76,7 @@ public class ViewPhotosCallbackCommand : BaseCallbackCommand
                 var photo = _memoryCachService
                     .GetCurrentPhotoToGoBackFromMemoryCach(chatId);
 
-                _viewPhotoMessage = new(photo.Id);
+                _viewPhotoMessage = new(photo.Id, false);
 
                 await _viewPhotoMessage
                     .EditMediaMessage(chatId, messageId, client, photo.PathToPhoto);
@@ -74,7 +87,7 @@ public class ViewPhotosCallbackCommand : BaseCallbackCommand
             {
                 var photo = _memoryCachService.GetCurrentPhotoFromMemoryCach(chatId);
 
-                _viewPhotoMessage = new(photo.Id);
+                _viewPhotoMessage = new(photo.Id, false);
 
                 await _viewPhotoMessage
                     .EditMediaMessage(chatId, messageId, client, photo.PathToPhoto);
@@ -87,16 +100,33 @@ public class ViewPhotosCallbackCommand : BaseCallbackCommand
 
                 var photos = await _getPhotosQuery.GetUserPhotosAsync(chatId);
 
-                _memoryCachService.SetMemoryCach(chatId, photos);
+                if (photos == null || photos.Count == 0)
+                {
+                    await _updateDatingUserCommand.UpdateDatingUserHasAPhotoAsync(chatId);
+                    
+                    await MessageService.DeleteMessage(chatId, messageId, client);
+                }
 
-                _viewPhotoMessage = new(photos[^1].Id);
+                if (photos != null && photos.Count > 1)
+                {
+                    _memoryCachService.SetMemoryCach(chatId, photos);
 
-                await _viewPhotoMessage.EditMediaMessage(chatId, messageId, client,
-                    photos[^1].PathToPhoto);
+                    _viewPhotoMessage = new(photos[^1].Id, false);
+
+                    await _viewPhotoMessage.EditMediaMessage(chatId, messageId, client,
+                        photos[^1].PathToPhoto);
+                }
+
+                if (photos != null && photos.Count == 1)
+                {
+                    _viewPhotoMessage = new(photos[^1].Id, true);
+
+                    await _viewPhotoMessage.EditMediaMessage(chatId, messageId, client,
+                        photos[^1].PathToPhoto);
+                }
 
                 await MessageService.ShowAllert(callbackId, client, "the photo has been deleted");
-                
-                return;
+
             }
         }
     }
