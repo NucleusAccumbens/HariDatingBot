@@ -151,8 +151,6 @@ public class MemoryCachService : IMemoryCachService
 
         if (_memoryCach.Get(chatId + 10) is not null and List<long>)
         {
-            var requests = (List<long>)_memoryCach.Get(chatId + 10);
-
             return (List<long>)_memoryCach.Get(chatId + 10);
         }
 

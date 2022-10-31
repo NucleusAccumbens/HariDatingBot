@@ -54,6 +54,7 @@ public static class ConfigureService
         services.AddScoped<BaseCallbackCommand, StartDatingCallbackCommandcs>();
         services.AddScoped<BaseCallbackCommand, PhotoForDatingCallbackCommand>();
         services.AddScoped<BaseCallbackCommand, RequestAChatCallbackCommand>();
+        services.AddScoped<BaseCallbackCommand, StiTestCallbackCommand>();
 
         return services;
     }

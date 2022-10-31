@@ -77,7 +77,8 @@ public class RequestAChatCallbackCommand : BaseCallbackCommand
                 }
                 if (data.Contains("ySendAMessage"))
                 {
-                    _memoryCachService.SetInterlocutorChatIdInMemoryCach(chatId, GetChatIdForSendMessage(data));
+                    _memoryCachService
+                        .SetInterlocutorChatIdInMemoryCach(chatId, GetChatIdForSendMessage(data));
 
                     await _chatMessage.EditMessage(chatId, messageId, client);
                 }
