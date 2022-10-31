@@ -93,7 +93,7 @@ public class StartDatingCallbackCommandcs : BaseCallbackCommand
                     return;
                 }
                 if (data.Contains("wRequestAChat"))
-                {
+                {                 
                     var user = await _getDatingUserQuery.GetDatingUserAsync(chatId);
 
                     var chatIdOfCompletedRequests = _memoryCachService
@@ -113,15 +113,20 @@ public class StartDatingCallbackCommandcs : BaseCallbackCommand
                     if (user != null && chatIdOfCompletedRequests == null || 
                         user != null && chatIdOfCompletedRequests != null && !chatIdOfCompletedRequests.Contains(user.ChatId))
                     {
-                        _chatMessage = new(user.Adapt<DatingUserDto>(), chatId, false);
+                        bool canRequested = _memoryCachService.SetRequestCountInMemoryCach(chatId);
 
-                        var request = await CreateRequest(GetUserChatIdToRequest(data), user);
+                        if (canRequested == true)
+                        {
+                            _chatMessage = new(user.Adapt<DatingUserDto>(), chatId, false);
 
-                        await _chatMessage.SendMessage(GetUserChatIdToRequest(data), client);
+                            var request = await CreateRequest(GetUserChatIdToRequest(data), user);
 
-                        _memoryCachService.SetMemoryCach(chatId, user.ChatId);
+                            await _chatMessage.SendMessage(GetUserChatIdToRequest(data), client);
 
-                        await MessageService.ShowAllert(callbackId, client, "application sent");
+                            _memoryCachService.SetMemoryCach(chatId, user.ChatId);
+
+                            await MessageService.ShowAllert(callbackId, client, "application sent");
+                        }
                     }
 
                     else await MessageService.ShowAllert(callbackId, client, 

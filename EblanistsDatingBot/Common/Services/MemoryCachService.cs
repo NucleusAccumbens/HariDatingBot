@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Caching.Memory;
+﻿using EblanistsDatingBot.Models;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace EblanistsDatingBot.Common.Services;
 
@@ -146,6 +147,16 @@ public class MemoryCachService : IMemoryCachService
         else throw new MemoryCachException();
     }
 
+    public List<long>? GetChatIdOfCompletedRequestsFromMemoryCach(long chatId)
+    {
+        if (_memoryCach.Get(chatId + 10) is not null and List<long>)
+        {
+            return (List<long>)_memoryCach.Get(chatId + 10);
+        }
+
+        else return null;
+    }
+
     public void SetMemoryCach(long chatId, DatingUserDto datingUserDto)
     {
         _memoryCach.Set(chatId + 1, datingUserDto,
@@ -212,24 +223,6 @@ public class MemoryCachService : IMemoryCachService
             });
     }
 
-    private void SetCurrentPhotoIndex(long chatId, int count)
-    {
-        _memoryCach.Set(chatId + 6, count,
-            new MemoryCacheEntryOptions
-            {
-                AbsoluteExpirationRelativeToNow = TimeSpan.FromDays(1)
-            });
-    }
-
-    private void SetCurrentUserIndex(long chatId, int count)
-    {
-        _memoryCach.Set(chatId + 8, count,
-            new MemoryCacheEntryOptions
-            {
-                AbsoluteExpirationRelativeToNow = TimeSpan.FromDays(1)
-            });
-    }
-
     public void SetMemoryCach(long chatId, long requestChatId)
     {
         if (_memoryCach.Get(chatId + 10) is null)
@@ -259,13 +252,55 @@ public class MemoryCachService : IMemoryCachService
         }
     }
 
-    public List<long>? GetChatIdOfCompletedRequestsFromMemoryCach(long chatId)
+    public bool SetRequestCountInMemoryCach(long chatId)
     {
-        if (_memoryCach.Get(chatId + 10) is not null and List<long>)
+        if ((int?)_memoryCach.Get(chatId + 11) is not null and int)
         {
-            return (List<long>)_memoryCach.Get(chatId + 10);
+            int? count = (int?)_memoryCach.Get(chatId + 11);
+
+            if (count >= 12) return false;
+
+            else
+            {
+                _memoryCach.Set(chatId + 11, count += 1,
+                    new MemoryCacheEntryOptions
+                    {
+                        AbsoluteExpirationRelativeToNow = TimeSpan.FromDays(1)
+                    });
+
+
+                Console.WriteLine($"Пользователь №{chatId} отправил {count}-й по счёту запрос\n\n");
+
+                return true;
+            }
         }
 
-        else return null;
+        else _memoryCach.Set(chatId + 11, 1,
+                new MemoryCacheEntryOptions
+                {
+                    AbsoluteExpirationRelativeToNow = TimeSpan.FromDays(1)
+                });
+
+        Console.WriteLine($"\nПользователь №{chatId} отправил 1-й по счёту запрос\n");
+
+        return true;       
+    }
+
+    private void SetCurrentPhotoIndex(long chatId, int count)
+    {
+        _memoryCach.Set(chatId + 6, count,
+            new MemoryCacheEntryOptions
+            {
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromDays(1)
+            });
+    }
+
+    private void SetCurrentUserIndex(long chatId, int count)
+    {
+        _memoryCach.Set(chatId + 8, count,
+            new MemoryCacheEntryOptions
+            {
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromDays(1)
+            });
     }
 }

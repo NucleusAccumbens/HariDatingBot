@@ -12,9 +12,11 @@ public interface IMemoryCachService
 
     void SetMemoryCach(long chatId, long requestChatId);
 
+    bool SetRequestCountInMemoryCach(long chatId);
+
     DatingUserDto GetDatingUserDtoFromMemoryCach(long chatId);
 
-    string GetCommandStateFromMemoryCach(long chatId);
+    string? GetCommandStateFromMemoryCach(long chatId);
 
     int GetMessageIdFromMemoryCach(long chatId);
 
