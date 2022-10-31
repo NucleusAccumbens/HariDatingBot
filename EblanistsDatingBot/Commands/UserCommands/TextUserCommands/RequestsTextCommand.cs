@@ -6,12 +6,15 @@ public class RequestsTextCommand : BaseTextCommand
 {
     private readonly IGetDatingUserRequestsQuery _getDatingUserRequestsQuery;
 
+    private readonly ICheckDatingUserIsBlockedQuery _checkDatingUserIsBlockedQuery;
+
     private RequestAChatMessage _requestAChatMessage;
 
 
-    public RequestsTextCommand(IGetDatingUserRequestsQuery getDatingUserRequestsQuery)
+    public RequestsTextCommand(IGetDatingUserRequestsQuery getDatingUserRequestsQuery, ICheckDatingUserIsBlockedQuery checkDatingUserIsBlockedQuery)
     {
         _getDatingUserRequestsQuery = getDatingUserRequestsQuery;
+        _checkDatingUserIsBlockedQuery = checkDatingUserIsBlockedQuery;
     }
 
     public override string Name => "/requests";
@@ -29,9 +32,12 @@ public class RequestsTextCommand : BaseTextCommand
             {               
                 if (request.DatingUser != null)
                 {
+                    bool isBlocked = await _checkDatingUserIsBlockedQuery
+                        .CheckDatingUserIsBlockedAsync(request.DatingUser.ChatId, chatId);
+                   
                     _requestAChatMessage =
                         new(request.DatingUser.Adapt<DatingUserDto>(), 
-                        request.DatingUser.ChatId, request.IsBlocked);
+                        request.DatingUser.ChatId, isBlocked);
 
                     await _requestAChatMessage.SendMessage(chatId, client);
                 }

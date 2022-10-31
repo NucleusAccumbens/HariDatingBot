@@ -6,6 +6,7 @@ global using Mapster;
 global using Domain.Entities;
 global using Application.TlgUsers.Interfaces;
 global using Application.DatingUsers.Interfaces;
+global using Application.BlockedUsers.Interfaces;
 global using EblanistsDatingBot.Common.Interfaces;
 global using EblanistsDatingBot.Common.Abstractions;
 global using EblanistsDatingBot.Models;

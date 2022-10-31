@@ -11,12 +11,14 @@ public class RequestAChatCallbackCommand : BaseCallbackCommand
 
     private readonly IGetDatingUserQuery _getDatingUserQuery;
 
+    private readonly IBlockDatingUserCommand _blockDatingUserCommand;
 
     public RequestAChatCallbackCommand(IMemoryCachService memoryCachService, 
-        IGetDatingUserQuery getDatingUserQuery)
+        IGetDatingUserQuery getDatingUserQuery, IBlockDatingUserCommand blockDatingUserCommand)
     {
         _memoryCachService = memoryCachService;
         _getDatingUserQuery = getDatingUserQuery;
+        _blockDatingUserCommand = blockDatingUserCommand;
     }
 
     public override char CallbackDataCode => 'y';
@@ -42,14 +44,14 @@ public class RequestAChatCallbackCommand : BaseCallbackCommand
 
                     if (blokingUser != null)
                     {
-
+                        await _blockDatingUserCommand.BlockUserAsync(chatId, blokingUser.ChatId);
+                        
                         _requestAChatMessage = new(blokingUser.Adapt<DatingUserDto>(), blokingUser.ChatId, true);
 
                         await _requestAChatMessage.EditMessage(chatId, messageId, client);
 
                         await MessageService.ShowAllert(callbackId, client,
-                            "the person is blocked and will not see your profile in the search " +
-                            "and will not be able to send a second request for dialogue");
+                            "the person is blocked and will not be able to send a repeated request for a dialogue");
                     }
 
                     return;
@@ -60,6 +62,8 @@ public class RequestAChatCallbackCommand : BaseCallbackCommand
 
                     if (user != null)
                     {
+                        await _blockDatingUserCommand.UnlockUserAsync(chatId, user.ChatId);
+
                         _requestAChatMessage = new(user.Adapt<DatingUserDto>(), user.ChatId, false);
 
                         await _requestAChatMessage.EditMessage(chatId, messageId, client);

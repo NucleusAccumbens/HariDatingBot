@@ -1,3 +1,4 @@
+using Application.BlockedUsers.Queries;
 using Application.Photos.Interfaces;
 using Application.Requests.Interfaces;
 using EblanistsDatingBot.Common.Services;
@@ -23,13 +24,16 @@ public class StartDatingCallbackCommandcs : BaseCallbackCommand
 
     private readonly ICreateRequestCommand _createRequestCommand;
 
+    private readonly ICheckDatingUserIsBlockedQuery _checkDatingUserIsBlockedQuery;
+
     public StartDatingCallbackCommandcs(IGetDatingUserQuery datingUserQuery, IMemoryCachService memoryCachService,
-        IGetPhotosQuery getPhotosQuery, ICreateRequestCommand createRequestCommand)
+        IGetPhotosQuery getPhotosQuery, ICreateRequestCommand createRequestCommand, ICheckDatingUserIsBlockedQuery checkDatingUserIsBlockedQuery)
     {
         _getDatingUserQuery = datingUserQuery;
         _memoryCachService = memoryCachService;
         _getPhotosQuery = getPhotosQuery;
         _createRequestCommand = createRequestCommand;
+        _checkDatingUserIsBlockedQuery = checkDatingUserIsBlockedQuery;
     }
 
     public override char CallbackDataCode => 'w';
@@ -93,7 +97,18 @@ public class StartDatingCallbackCommandcs : BaseCallbackCommand
                     var user = await _getDatingUserQuery.GetDatingUserAsync(chatId);
 
                     var chatIdOfCompletedRequests = _memoryCachService
-                        .GetChatIdOfCompletedRequestsFromMemoryCach(chatId);
+                        .GetChatIdOfCompletedRequestsFromMemoryCach(GetUserChatIdToRequest(data));
+
+                    bool isBlocked = await _checkDatingUserIsBlockedQuery
+                        .CheckDatingUserIsBlockedAsync(chatId, GetUserChatIdToRequest(data));
+
+                    if (isBlocked == true)
+                    {
+                        await MessageService.ShowAllert(callbackId, client,
+                            "person has blocked you. you can't send a chat request");
+
+                        return;
+                    }
 
                     if (user != null && chatIdOfCompletedRequests == null || 
                         user != null && chatIdOfCompletedRequests != null && !chatIdOfCompletedRequests.Contains(user.ChatId))

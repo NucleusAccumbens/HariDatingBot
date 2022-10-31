@@ -1,4 +1,7 @@
-﻿using Application.DatingUsers.Commands;
+﻿using Application.BlockedUsers.Commands;
+using Application.BlockedUsers.Interfaces;
+using Application.BlockedUsers.Queries;
+using Application.DatingUsers.Commands;
 using Application.DatingUsers.Interfaces;
 using Application.DatingUsers.Queries;
 using Application.Photos.Commands;
@@ -30,6 +33,8 @@ public static class ConfigureServices
         services.AddScoped<IGetPhotosQuery, GetPhotosQuery>();
         services.AddScoped<ICreateRequestCommand, CreateRequestCommand>();
         services.AddScoped<IGetDatingUserRequestsQuery, GetDatingUserRequestsQuery>();
+        services.AddScoped<IBlockDatingUserCommand, BlockDatingUserCommand>();
+        services.AddScoped<ICheckDatingUserIsBlockedQuery, CheckDatingUserIsBlockedQuery>();
   
         return services;
     }
