@@ -1,6 +1,4 @@
-﻿using EblanistsDatingBot.Common.Abstractions;
-using EblanistsDatingBot.Common.Interfaces;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 
 namespace EblanistsDatingBot.Common;
 
@@ -12,15 +10,15 @@ public class CommandAnalyzer : ICommandAnalyzer
 
     private readonly IMemoryCachService _memoryCachService;
 
-    //private readonly IKickTlgUserCommand _kickTlgUserCommand;
+    private readonly IKickTlgUserCommand _kickTlgUserCommand;
 
-    public CommandAnalyzer(IServiceProvider serviceProvider, IMemoryCachService memoryCachService
-/*        IKickTlgUserCommand kickTlgUserCommand*/)
+    public CommandAnalyzer(IServiceProvider serviceProvider, IMemoryCachService memoryCachService,
+        IKickTlgUserCommand kickTlgUserCommand)
     {
         _baseTextCommands = serviceProvider.GetServices<BaseTextCommand>().ToList();
         _baseCallbackCommands = serviceProvider.GetServices<BaseCallbackCommand>().ToList();
         _memoryCachService = memoryCachService;
-        //_kickTlgUserCommand = kickTlgUserCommand;
+        _kickTlgUserCommand = kickTlgUserCommand;
     }
 
     public async Task AnalyzeCommandsAsync(ITelegramBotClient client, Update update)
@@ -29,29 +27,29 @@ public class CommandAnalyzer : ICommandAnalyzer
         {           
             if (update.Type == UpdateType.MyChatMember && update.MyChatMember != null)
             {
-                //await _kickTlgUserCommand.ManageTlgUserKickingAsync(update.MyChatMember.Chat.Id);
+                await _kickTlgUserCommand.ManageTlgUserKickingAsync(update.MyChatMember.Chat.Id);
             }
             if (update.Type == UpdateType.CallbackQuery && update.CallbackQuery != null)
             {
-                //bool isKicked = await _kickTlgUserCommand
-                //        .CheckTlgUserIsKicked(update.CallbackQuery.Message?.Chat.Id);
+                bool isKicked = await _kickTlgUserCommand
+                        .CheckTlgUserIsKicked(update.CallbackQuery.Message?.Chat.Id);
 
-                //if (!isKicked)
-                //{
+                if (!isKicked)
+                {
                     await AnalyzeCallbackCommand(client, update);
                     await client.AnswerCallbackQueryAsync(update.CallbackQuery.Id);
-                //}
+                }
             }
             if (update.Message != null && update.Message.Type == MessageType.Text ||
                 update.Message != null && update.Message.Type == MessageType.Photo)
             {
-                //bool isKicked = await _kickTlgUserCommand
-                //        .CheckTlgUserIsKicked(update.Message?.Chat.Id);
+                bool isKicked = await _kickTlgUserCommand
+                        .CheckTlgUserIsKicked(update.Message?.Chat.Id);
 
-                //if (!isKicked)
-                //{
+                if (!isKicked)
+                {
                     await AnalyzeTextCommand(client, update);
-                //}
+                }
             }
         }
         catch (Exception ex)
