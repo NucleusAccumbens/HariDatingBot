@@ -27,6 +27,7 @@ public static class ConfigureService
         services.AddScoped<BaseTextCommand, DatingTextCommand>();
         services.AddScoped<BaseTextCommand, RequestsTextCommand>();
         services.AddScoped<BaseTextCommand, ChatingTextCommand>();
+        services.AddScoped<BaseTextCommand, FeedbackTextCommand>();
         services.AddScoped<BaseCallbackCommand, RegisterCallbackCommand>();
         services.AddScoped<BaseCallbackCommand, VeganCallbackCommand>();
         services.AddScoped<BaseCallbackCommand, NoncredistCallbackCommand>();
