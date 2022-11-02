@@ -1,4 +1,5 @@
-﻿using EblanistsDatingBot.Messages.UserMessages;
+﻿using EblanistsDatingBot.Common.Services;
+using EblanistsDatingBot.Messages.UserMessages;
 
 namespace EblanistsDatingBot.Commands.UserCommands.TextUserCommands;
 
@@ -9,6 +10,8 @@ public class RequestsTextCommand : BaseTextCommand
     private readonly ICheckDatingUserIsBlockedQuery _checkDatingUserIsBlockedQuery;
 
     private RequestAChatMessage _requestAChatMessage;
+
+    private readonly string _text = "you don't have any chat requests yet";
 
 
     public RequestsTextCommand(IGetDatingUserRequestsQuery getDatingUserRequestsQuery, ICheckDatingUserIsBlockedQuery checkDatingUserIsBlockedQuery)
@@ -28,18 +31,26 @@ public class RequestsTextCommand : BaseTextCommand
             var requests = await _getDatingUserRequestsQuery
                 .GetRequestsAsync(chatId);
 
-            foreach (var request in requests)
-            {               
-                if (request.DatingUser != null)
-                {
-                    bool isBlocked = await _checkDatingUserIsBlockedQuery
-                        .CheckDatingUserIsBlockedAsync(request.DatingUser.ChatId, chatId);
-                   
-                    _requestAChatMessage =
-                        new(request.DatingUser.Adapt<DatingUserDto>(), 
-                        request.DatingUser.ChatId, isBlocked);
+            if (requests == null || requests.Count == 0)
+            {
+                await MessageService.SendMessage(chatId, client, _text, null);
+            }
 
-                    await _requestAChatMessage.SendMessage(chatId, client);
+            else
+            {
+                foreach (var request in requests)
+                {
+                    if (request.DatingUser != null)
+                    {
+                        bool isBlocked = await _checkDatingUserIsBlockedQuery
+                            .CheckDatingUserIsBlockedAsync(request.DatingUser.ChatId, chatId);
+
+                        _requestAChatMessage =
+                            new(request.DatingUser.Adapt<DatingUserDto>(),
+                            request.DatingUser.ChatId, isBlocked);
+
+                        await _requestAChatMessage.SendMessage(chatId, client);
+                    }
                 }
             }
         }
