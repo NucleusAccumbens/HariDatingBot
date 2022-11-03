@@ -1,22 +1,23 @@
 ﻿using EblanistsDatingBot.Common.Services;
+using EblanistsDatingBot.Messages.UserMessages;
 
 namespace EblanistsDatingBot.Commands.UserCommands.TextUserCommands;
 
-public class HelpTextCommand : BaseTextCommand
+public class DeleteTextCommand : BaseTextCommand
 {
-    private readonly HelpMessage _helpMessage = new();
-
     private readonly string _noProfileMessage =
         "you have not created a profile yet. click /start to register";
 
+    private readonly DeleteMessage _deleteMessage = new();
+
     private readonly ICheckUserIsInDbQuery _checkUserIsInDbQuery;
 
-    public HelpTextCommand(ICheckUserIsInDbQuery checkUserIsInDbQuery)
+    public DeleteTextCommand(ICheckUserIsInDbQuery checkUserIsInDbQuery)
     {
         _checkUserIsInDbQuery = checkUserIsInDbQuery;
     }
 
-    public override string Name => "/help";
+    public override string Name => "/delete_profile";
 
     public override async Task Execute(Update update, ITelegramBotClient client)
     {
@@ -31,7 +32,7 @@ public class HelpTextCommand : BaseTextCommand
                 return;
             }
 
-            await _helpMessage.SendMessage(chatId, client);
+            await _deleteMessage.SendMessage(chatId, client);
         }
     }
 }

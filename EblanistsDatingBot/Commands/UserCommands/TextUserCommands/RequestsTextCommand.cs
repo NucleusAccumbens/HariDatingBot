@@ -5,6 +5,9 @@ namespace EblanistsDatingBot.Commands.UserCommands.TextUserCommands;
 
 public class RequestsTextCommand : BaseTextCommand
 {
+    private readonly string _noProfileMessage =
+    "you have not created a profile yet. click /start to register";
+
     private readonly IGetDatingUserRequestsQuery _getDatingUserRequestsQuery;
 
     private readonly ICheckDatingUserIsBlockedQuery _checkDatingUserIsBlockedQuery;
@@ -13,11 +16,15 @@ public class RequestsTextCommand : BaseTextCommand
 
     private readonly string _text = "you don't have any chat requests yet";
 
+    private readonly ICheckUserIsInDbQuery _checkUserIsInDbQuery;
 
-    public RequestsTextCommand(IGetDatingUserRequestsQuery getDatingUserRequestsQuery, ICheckDatingUserIsBlockedQuery checkDatingUserIsBlockedQuery)
+
+    public RequestsTextCommand(IGetDatingUserRequestsQuery getDatingUserRequestsQuery, 
+        ICheckDatingUserIsBlockedQuery checkDatingUserIsBlockedQuery, ICheckUserIsInDbQuery checkUserIsInDbQuery)
     {
         _getDatingUserRequestsQuery = getDatingUserRequestsQuery;
         _checkDatingUserIsBlockedQuery = checkDatingUserIsBlockedQuery;
+        _checkUserIsInDbQuery = checkUserIsInDbQuery;
     }
 
     public override string Name => "/requests";
@@ -27,6 +34,13 @@ public class RequestsTextCommand : BaseTextCommand
         if (update.Message != null && update.Message.Text != null)
         {
             long chatId = update.Message.Chat.Id;
+
+            if (await _checkUserIsInDbQuery.CheckUserIsInDbAsync(chatId) == false)
+            {
+                await MessageService.SendMessage(chatId, client, _noProfileMessage, null);
+
+                return;
+            }
 
             var requests = await _getDatingUserRequestsQuery
                 .GetRequestsAsync(chatId);

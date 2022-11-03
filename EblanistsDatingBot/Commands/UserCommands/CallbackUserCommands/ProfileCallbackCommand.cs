@@ -1,16 +1,23 @@
-﻿using EblanistsDatingBot.Messages.UserMessages;
+﻿using EblanistsDatingBot.Common.Services;
+using EblanistsDatingBot.Messages.UserMessages;
 
 namespace EblanistsDatingBot.Commands.UserCommands.CallbackUserCommands;
 
 public class ProfileCallbackCommand : BaseCallbackCommand
 {
+    private readonly string _noProfileMessage =
+        "you have not created a profile yet. click /start to register";
+
     private ProfileMessage _profileMessage;
 
     private readonly IGetDatingUserQuery _getDatingUserQuery;
 
-    public ProfileCallbackCommand(IGetDatingUserQuery getDatingUserQuery)
+    private readonly ICheckUserIsInDbQuery _checkUserIsInDbQuery;
+
+    public ProfileCallbackCommand(IGetDatingUserQuery getDatingUserQuery, ICheckUserIsInDbQuery checkUserIsInDbQuery)
     {
-        _getDatingUserQuery = getDatingUserQuery;    
+        _getDatingUserQuery = getDatingUserQuery;  
+        _checkUserIsInDbQuery = checkUserIsInDbQuery;
     }
     
     public override char CallbackDataCode => 'o';
@@ -22,6 +29,15 @@ public class ProfileCallbackCommand : BaseCallbackCommand
             long chatId = update.CallbackQuery.Message.Chat.Id;
 
             int messageId = update.CallbackQuery.Message.MessageId;
+
+            string callbackId = update.CallbackQuery.Id;
+
+            if (await _checkUserIsInDbQuery.CheckUserIsInDbAsync(chatId) == false)
+            {
+                await MessageService.ShowAllert(callbackId, client, _noProfileMessage);
+
+                return;
+            }
 
             var user = await _getDatingUserQuery.GetDatingUserAsync(chatId);
 

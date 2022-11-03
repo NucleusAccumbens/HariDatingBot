@@ -8,7 +8,7 @@ public class ChildfreeCallbackCommand : BaseCallbackCommand
     private readonly string _info =
         "childfree is a refusal to reproduce\n" +
         "childfree can have natural and adopted children\n\n" +
-        "i recommend the book <b>\"better never be: the harm of arising\"</b> by <b>david benatar</b>";
+        "i recommend the book \"better never be: the harm of arising\" by david benatar";
 
     private readonly string _messageText = "are you a cosmopolitan?";
 
