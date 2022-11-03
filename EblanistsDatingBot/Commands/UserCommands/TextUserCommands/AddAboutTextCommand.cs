@@ -35,25 +35,22 @@ public class AddAboutTextCommand : BaseTextCommand
 
             try
             {
+                if (TextCommandService.CheckMessageIsCommand(text) == true) return;
+                
                 int messageId = _memoryCachService.GetMessageIdFromMemoryCach(chatId);
 
                 await MessageService.DeleteMessage(chatId, textMessageId, client);
 
-                if (text.Length > 500) return;
+                await _updateDatingUserCommand
+                        .UpdateUserAboutAsync(chatId, TextCommandService.CheckStringLessThan500(text));
 
-                if (text.Length <= 500)
-                {
-                    await _updateDatingUserCommand
-                        .UpdateUserAboutAsync(chatId, text);
+                var user = await _getDatingUserQuery.GetDatingUserAsync(chatId);
 
-                    var user = await _getDatingUserQuery.GetDatingUserAsync(chatId);
-                    
-                    if (user != null ) _profileMessage = new(user.Adapt<DatingUserDto>(), true);
+                if (user != null) _profileMessage = new(user.Adapt<DatingUserDto>(), true);
 
-                    _memoryCachService.SetMemoryCach(chatId, String.Empty, 0);
+                _memoryCachService.SetMemoryCach(chatId, String.Empty, 0);
 
-                    await _profileMessage.EditMessage(chatId, messageId, client);
-                }
+                await _profileMessage.EditMessage(chatId, messageId, client);
             }
             catch (MemoryCachException ex)
             {

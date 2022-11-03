@@ -1,8 +1,8 @@
-﻿namespace EblanistsDatingBot.Messages;
+﻿namespace EblanistsDatingBot.Messages.UserMessages;
 
 public class HelpMessage : BaseMessage
 {
-    public override string MessageText => 
+    public override string MessageText =>
         "/start - run hari\n" +
         "/dating - view profiles of other users\n" +
         "/requests - chat requests\n" +
