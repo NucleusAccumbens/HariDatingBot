@@ -9,6 +9,9 @@
         PalmBack,
         Palm,
         Feet,
-        FeetOnTop
+        FeetOnTop,
+        Underarm,
+        Crotch,
+        Others
     }
 }

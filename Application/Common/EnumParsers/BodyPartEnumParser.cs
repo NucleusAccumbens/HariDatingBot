@@ -13,6 +13,9 @@ public class BodyPartEnumParser
         if (bodyPart == BodyParts.PalmBack) return "тыльная сторона ладони";
         if (bodyPart == BodyParts.Feet) return "стопы";
         if (bodyPart == BodyParts.FeetOnTop) return "стопы сверху";
+        if (bodyPart == BodyParts.Crotch) return "промежность";
+        if (bodyPart == BodyParts.Underarm) return "подмышка";
+        if (bodyPart == BodyParts.Others) return "другое";
         else return "портрет";
     }
 }

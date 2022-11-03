@@ -43,12 +43,6 @@ public class PhotoCallbackCommand : BaseCallbackCommand
 
                 return;
             }
-            if (update.CallbackQuery.Data == "sPortrait")
-            {
-                _memoryCachService.SetMemoryCach(chatId, "addPhotoPortrait", messageId);
-
-                return;
-            }
             if (update.CallbackQuery.Data == "sPalmBack")
             {
                 _memoryCachService.SetMemoryCach(chatId, "addPhotoPalmBack", messageId);
@@ -70,6 +64,18 @@ public class PhotoCallbackCommand : BaseCallbackCommand
             if (update.CallbackQuery.Data == "sFeet")
             {
                 _memoryCachService.SetMemoryCach(chatId, "addPhotoFeet", messageId);
+            }
+            if (update.CallbackQuery.Data == "sCrotch")
+            {
+                _memoryCachService.SetMemoryCach(chatId, "addPhotoCrotch", messageId);
+            }
+            if (update.CallbackQuery.Data == "sUnderarm")
+            {
+                _memoryCachService.SetMemoryCach(chatId, "addPhotoUnderarm", messageId);
+            }
+            if (update.CallbackQuery.Data == "sOthers")
+            {
+                _memoryCachService.SetMemoryCach(chatId, "addPhotoOthers", messageId);
             }
         }
     }

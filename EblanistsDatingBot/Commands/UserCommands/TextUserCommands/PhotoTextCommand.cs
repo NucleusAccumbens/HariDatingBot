@@ -113,6 +113,24 @@ public class PhotoTextCommand : BaseTextCommand
 
                     await SendVerifideMessageToAdmins(client, path, BodyParts.PalmBack, photoId);
                 }
+                if (commandState == "addPhotoCrotch")
+                {
+                    long photoId = await AddPhotoToDatingUser(chatId, BodyParts.Crotch, path);
+
+                    await SendVerifideMessageToAdmins(client, path, BodyParts.Crotch, photoId);
+                }
+                if (commandState == "addPhotoUnderarm")
+                {
+                    long photoId = await AddPhotoToDatingUser(chatId, BodyParts.Underarm, path);
+
+                    await SendVerifideMessageToAdmins(client, path, BodyParts.Underarm, photoId);
+                }
+                if (commandState == "addPhotoOthers")
+                {
+                    long photoId = await AddPhotoToDatingUser(chatId, BodyParts.Others, path);
+
+                    await SendVerifideMessageToAdmins(client, path, BodyParts.Others, photoId);
+                }
             }
             catch (MemoryCachException ex)
             {

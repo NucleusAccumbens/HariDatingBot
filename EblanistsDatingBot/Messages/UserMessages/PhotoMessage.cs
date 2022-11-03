@@ -20,7 +20,7 @@ public class PhotoMessage : BaseMessage
         new[]
         {
             InlineKeyboardButton.WithCallbackData(text: "🔘 full body side", callbackData: $"sFullBodySide"),
-            InlineKeyboardButton.WithCallbackData(text: "🔘 portrait", callbackData: $"sPortrait")
+            InlineKeyboardButton.WithCallbackData(text: "🔘 underarm", callbackData: $"sUnderarm"),
         },
         new[]
         {
@@ -30,11 +30,16 @@ public class PhotoMessage : BaseMessage
         new[]
         {
             InlineKeyboardButton.WithCallbackData(text: "🔘 full body back", callbackData: $"sFullBodyBack"),
-            InlineKeyboardButton.WithCallbackData(text: "🔘 palms", callbackData: $"sPalms"),
+            InlineKeyboardButton.WithCallbackData(text: "🔘 crotch", callbackData: $"sCrotch"),
         },
         new[]
         {
             InlineKeyboardButton.WithCallbackData(text: "🔘 feet on top", callbackData: $"sFeetOnTop"),
+            InlineKeyboardButton.WithCallbackData(text: "🔘 palms", callbackData: $"sPalms"),
+        },
+        new[]
+        {
+            InlineKeyboardButton.WithCallbackData(text: "🔘 others", callbackData: $"sOthers"),
             InlineKeyboardButton.WithCallbackData(text: "🔘 feet", callbackData: $"sFeet"),
         },
         new[]
