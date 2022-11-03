@@ -20,10 +20,12 @@ public class DeleteUserCommand : IDeleteUserCommand
             .SingleOrDefaultAsync(u => u.ChatId == chatId);
 
         var photos = await _context.Photos
-            .SingleOrDefaultAsync(u => u.ChatId == chatId);
+            .Where(u => u.ChatId == chatId)
+            .ToListAsync();
 
         var requests = await _context.Requests
-            .SingleOrDefaultAsync(u => u.ChatId == chatId);
+            .Where(u => u.ChatId == chatId)
+            .ToListAsync();
 
         if (datingUser != null && tlgUser != null)
         {
@@ -31,9 +33,21 @@ public class DeleteUserCommand : IDeleteUserCommand
 
             _context.TlgUsers.Remove(tlgUser);
 
-            if (photos != null) _context.Photos.Remove(photos);
+            if (photos != null)
+            {
+                foreach (var photo in photos)
+                {
+                    _context.Photos.Remove(photo);
+                }
+            }
 
-            if (requests != null) _context.Requests.Remove(requests);
+            if (requests != null)
+            {
+                foreach (var request in requests)
+                {
+                    _context.Requests.Remove(request);
+                }
+            }
 
             await _context.SaveChangesAsync();
         }

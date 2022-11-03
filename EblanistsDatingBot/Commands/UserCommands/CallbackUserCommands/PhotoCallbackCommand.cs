@@ -14,9 +14,10 @@ public class PhotoCallbackCommand : BaseCallbackCommand
 
     private readonly ICheckUserIsInDbQuery _checkUserIsInDbQuery;
 
-    public PhotoCallbackCommand(IMemoryCachService memoryCachService)
+    public PhotoCallbackCommand(IMemoryCachService memoryCachService, ICheckUserIsInDbQuery checkUserIsInDbQuery)
     {
         _memoryCachService = memoryCachService;
+        _checkUserIsInDbQuery = checkUserIsInDbQuery;
     }
 
     public override char CallbackDataCode => 's';
