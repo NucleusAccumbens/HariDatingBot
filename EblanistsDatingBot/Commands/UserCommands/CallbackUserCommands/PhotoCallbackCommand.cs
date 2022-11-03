@@ -1,12 +1,18 @@
-﻿using EblanistsDatingBot.Messages.UserMessages;
+﻿using EblanistsDatingBot.Common.Services;
+using EblanistsDatingBot.Messages.UserMessages;
 
 namespace EblanistsDatingBot.Commands.UserCommands.CallbackUserCommands;
 
 public class PhotoCallbackCommand : BaseCallbackCommand
 {
+    private readonly string _noProfileMessage =
+        "you have not created a profile yet. click /start to register";
+
     private readonly AddPhotoMessage _addPhotoMessage = new();
 
     private readonly IMemoryCachService _memoryCachService;
+
+    private readonly ICheckUserIsInDbQuery _checkUserIsInDbQuery;
 
     public PhotoCallbackCommand(IMemoryCachService memoryCachService)
     {
@@ -22,6 +28,15 @@ public class PhotoCallbackCommand : BaseCallbackCommand
             long chatId = update.CallbackQuery.Message.Chat.Id;
 
             int messageId = update.CallbackQuery.Message.MessageId;
+
+            string callbackId = update.CallbackQuery.Id;
+
+            if (await _checkUserIsInDbQuery.CheckUserIsInDbAsync(chatId) == false)
+            {
+                await MessageService.ShowAllert(callbackId, client, _noProfileMessage);
+
+                return;
+            }
 
             await _addPhotoMessage.EditMessage(chatId, messageId, client);
 

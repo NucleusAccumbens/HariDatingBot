@@ -8,6 +8,9 @@ public class ViewPhotosCallbackCommand : BaseCallbackCommand
 {
     private readonly string _allert = "there are no photos in your profile";
 
+    private readonly string _noProfileMessage =
+        "you have not created a profile yet. click /start to register";
+
     private ViewPhotoMessage _viewPhotoMessage;
 
     private readonly IMemoryCachService _memoryCachService;
@@ -20,15 +23,18 @@ public class ViewPhotosCallbackCommand : BaseCallbackCommand
 
     private readonly IUpdateDatingUserCommand _updateDatingUserCommand;
 
+    private readonly ICheckUserIsInDbQuery _checkUserIsInDbQuery;
+
     public ViewPhotosCallbackCommand(ICheckUserHasPhotosQuery checkUserHasPhotosQuery,
         IGetPhotosQuery getPhotosQuery, IMemoryCachService memoryCachService, IDeletePhotoCommand deletePhotoCommand,
-        IUpdateDatingUserCommand updateDatingUserCommand)
+        IUpdateDatingUserCommand updateDatingUserCommand, ICheckUserIsInDbQuery checkUserIsInDbQuery)
     {
         _checkUserHasPhotosQuery = checkUserHasPhotosQuery;
         _getPhotosQuery = getPhotosQuery;
         _memoryCachService = memoryCachService;
         _deletePhotoCommand = deletePhotoCommand;
         _updateDatingUserCommand = updateDatingUserCommand;
+        _checkUserIsInDbQuery = checkUserIsInDbQuery;
     }
 
     public override char CallbackDataCode => 'u';
@@ -42,6 +48,13 @@ public class ViewPhotosCallbackCommand : BaseCallbackCommand
             int messageId = update.CallbackQuery.Message.MessageId;
 
             string callbackId = update.CallbackQuery.Id;
+
+            if (await _checkUserIsInDbQuery.CheckUserIsInDbAsync(chatId) == false)
+            {
+                await MessageService.ShowAllert(callbackId, client, _noProfileMessage);
+
+                return;
+            }
 
             string data = update.CallbackQuery.Data;
 

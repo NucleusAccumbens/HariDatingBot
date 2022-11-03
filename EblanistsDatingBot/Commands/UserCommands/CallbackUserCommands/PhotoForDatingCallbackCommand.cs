@@ -5,15 +5,21 @@ namespace EblanistsDatingBot.Commands.UserCommands.CallbackUserCommands;
 
 public class PhotoForDatingCallbackCommand : BaseCallbackCommand
 {
+    private readonly string _noProfileMessage =
+        "you have not created a profile yet. click /start to register";
+
     private readonly PhotoForDatingMessage _photoForDatingMessage = new();
     
     private readonly IMemoryCachService _memoryCachService;
 
-    public PhotoForDatingCallbackCommand(IMemoryCachService memoryCachService)
+    private readonly ICheckUserIsInDbQuery _checkUserIsInDbQuery;
+
+    public PhotoForDatingCallbackCommand(IMemoryCachService memoryCachService, ICheckUserIsInDbQuery checkUserIsInDbQuery)
     {
         _memoryCachService = memoryCachService;
+        _checkUserIsInDbQuery = checkUserIsInDbQuery;
     }
-    
+
     public override char CallbackDataCode => 'x';
 
     public override async Task CallbackExecute(Update update, ITelegramBotClient client)
@@ -25,6 +31,15 @@ public class PhotoForDatingCallbackCommand : BaseCallbackCommand
             int messageId = update.CallbackQuery.Message.MessageId;
 
             string data = update.CallbackQuery.Data;
+
+            string callbackId = update.CallbackQuery.Id;
+
+            if (await _checkUserIsInDbQuery.CheckUserIsInDbAsync(chatId) == false)
+            {
+                await MessageService.ShowAllert(callbackId, client, _noProfileMessage);
+
+                return;
+            }
 
             try
             {

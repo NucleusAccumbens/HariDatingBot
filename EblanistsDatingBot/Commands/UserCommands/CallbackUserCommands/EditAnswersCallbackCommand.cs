@@ -4,11 +4,18 @@ namespace EblanistsDatingBot.Commands.UserCommands.CallbackUserCommands;
 
 public class EditAnswersCallbackCommand : BaseCallbackCommand
 {
+    private readonly string _noProfileMessage =
+        "you have not created a profile yet. click /start to register";
+
     private readonly IUpdateDatingUserCommand _updateDatingUserCommand;
 
-    public EditAnswersCallbackCommand(IUpdateDatingUserCommand updateDatingUserCommand)
+    private readonly ICheckUserIsInDbQuery _checkUserIsInDbQuery;
+
+    public EditAnswersCallbackCommand(IUpdateDatingUserCommand updateDatingUserCommand,
+        ICheckUserIsInDbQuery checkUserIsInDbQuery)
     {
         _updateDatingUserCommand = updateDatingUserCommand;
+        _checkUserIsInDbQuery = checkUserIsInDbQuery;
     }
 
     public override char CallbackDataCode => 'd';
@@ -19,9 +26,14 @@ public class EditAnswersCallbackCommand : BaseCallbackCommand
         {
             long chatId = update.CallbackQuery.Message.Chat.Id;
 
-            int messageId = update.CallbackQuery.Message.MessageId;
-
             string callbackId = update.CallbackQuery.Id;
+
+            if (await _checkUserIsInDbQuery.CheckUserIsInDbAsync(chatId) == false)
+            {
+                await MessageService.ShowAllert(callbackId, client, _noProfileMessage);
+
+                return;
+            }
 
             if (update.CallbackQuery.Data == "d1")
             {

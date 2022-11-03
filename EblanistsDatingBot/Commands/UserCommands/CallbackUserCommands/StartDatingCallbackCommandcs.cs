@@ -15,6 +15,10 @@ public class StartDatingCallbackCommandcs : BaseCallbackCommand
         "there is no username in your telegram profile, the person will not be able to contact you. " +
         "add a username to send a chat request";
 
+    private readonly string _noProfileMessage =
+        "you have not created a profile yet. click /start to register";
+
+
     private readonly InlineKeyboardMarkup _keyboardMarkup = new(new[]
     {
         new[]
@@ -41,9 +45,11 @@ public class StartDatingCallbackCommandcs : BaseCallbackCommand
 
     private readonly IUpdateTlgUserCommand _updateTlgUserCommand;
 
+    private readonly ICheckUserIsInDbQuery _checkUserIsInDbQuery;
+
     public StartDatingCallbackCommandcs(IGetDatingUserQuery datingUserQuery, IMemoryCachService memoryCachService,
         IGetPhotosQuery getPhotosQuery, ICreateRequestCommand createRequestCommand, ICheckDatingUserIsBlockedQuery checkDatingUserIsBlockedQuery,
-        ICheckUsernameIsValidQuery checkUsernameIsValidQuery, IUpdateTlgUserCommand updateTlgUserCommand)
+        ICheckUsernameIsValidQuery checkUsernameIsValidQuery, IUpdateTlgUserCommand updateTlgUserCommand, ICheckUserIsInDbQuery checkUserIsInDbQuery)
     {
         _getDatingUserQuery = datingUserQuery;
         _memoryCachService = memoryCachService;
@@ -52,6 +58,7 @@ public class StartDatingCallbackCommandcs : BaseCallbackCommand
         _checkDatingUserIsBlockedQuery = checkDatingUserIsBlockedQuery;
         _checkUsernameIsValidQuery = checkUsernameIsValidQuery;
         _updateTlgUserCommand = updateTlgUserCommand;
+        _checkUserIsInDbQuery = checkUserIsInDbQuery;
     }
 
     public override char CallbackDataCode => 'w';
@@ -67,6 +74,13 @@ public class StartDatingCallbackCommandcs : BaseCallbackCommand
             string data = update.CallbackQuery.Data;
 
             string callbackId = update.CallbackQuery.Id;
+
+            if (await _checkUserIsInDbQuery.CheckUserIsInDbAsync(chatId) == false)
+            {
+                await MessageService.ShowAllert(callbackId, client, _noProfileMessage);
+
+                return;
+            }
 
             var users = await _getDatingUserQuery
                 .GetAllDatingUsersAsync(chatId);
