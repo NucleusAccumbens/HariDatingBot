@@ -37,14 +37,21 @@ public class StartDatingCallbackCommandcs : BaseCallbackCommand
 
     private readonly ICheckDatingUserIsBlockedQuery _checkDatingUserIsBlockedQuery;
 
+    private readonly ICheckUsernameIsValidQuery _checkUsernameIsValidQuery;
+
+    private readonly IUpdateTlgUserCommand _updateTlgUserCommand;
+
     public StartDatingCallbackCommandcs(IGetDatingUserQuery datingUserQuery, IMemoryCachService memoryCachService,
-        IGetPhotosQuery getPhotosQuery, ICreateRequestCommand createRequestCommand, ICheckDatingUserIsBlockedQuery checkDatingUserIsBlockedQuery)
+        IGetPhotosQuery getPhotosQuery, ICreateRequestCommand createRequestCommand, ICheckDatingUserIsBlockedQuery checkDatingUserIsBlockedQuery,
+        ICheckUsernameIsValidQuery checkUsernameIsValidQuery, IUpdateTlgUserCommand updateTlgUserCommand)
     {
         _getDatingUserQuery = datingUserQuery;
         _memoryCachService = memoryCachService;
         _getPhotosQuery = getPhotosQuery;
         _createRequestCommand = createRequestCommand;
         _checkDatingUserIsBlockedQuery = checkDatingUserIsBlockedQuery;
+        _checkUsernameIsValidQuery = checkUsernameIsValidQuery;
+        _updateTlgUserCommand = updateTlgUserCommand;
     }
 
     public override char CallbackDataCode => 'w';
@@ -137,6 +144,10 @@ public class StartDatingCallbackCommandcs : BaseCallbackCommand
 
                         return;
                     }
+
+                    bool usernameIsvalid = await _checkUsernameIsValidQuery.CheckUsernameIsValidAsync(chatId, username);
+
+                    if (usernameIsvalid == false) await _updateTlgUserCommand.UpdateTlgUsernameAsync(chatId, username);
 
                     if (user != null && chatIdOfCompletedRequests == null || 
                         user != null && chatIdOfCompletedRequests != null && !chatIdOfCompletedRequests.Contains(GetUserChatIdToRequest(data)))

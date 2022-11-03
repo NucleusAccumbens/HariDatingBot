@@ -38,6 +38,8 @@ public static class ConfigureServices
         services.AddScoped<IKickTlgUserCommand, KickTlgUserCommand>();
         services.AddScoped<IGetUsernameTlgUserQuery, GetUsernameTlgUserQuery>();
         services.AddScoped<IDeleteUserCommand, DeleteUserCommand>();
+        services.AddScoped<ICheckUsernameIsValidQuery, CheckUsernameIsValidQuery>();
+        services.AddScoped<IUpdateTlgUserCommand, UpdateTlgUserCommand>();
   
         return services;
     }

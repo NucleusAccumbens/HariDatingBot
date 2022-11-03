@@ -19,15 +19,22 @@ public class ChatRequestCallbackCommand : BaseCallbackCommand
 
     private readonly ICheckDatingUserIsBlockedQuery _checkDatingUserIsBlockedQuery;
 
+    private readonly ICheckUsernameIsValidQuery _checkUsernameIsValidQuery;
+
+    private readonly IUpdateTlgUserCommand _updateTlgUserCommand;
+
 
     public ChatRequestCallbackCommand(IGetDatingUserQuery getDatingUserQuery, 
         IBlockDatingUserCommand blockDatingUserCommand, IGetUsernameTlgUserQuery getUsernameTlgUserQuery, 
-        ICheckDatingUserIsBlockedQuery checkDatingUserIsBlockedQuery)
+        ICheckDatingUserIsBlockedQuery checkDatingUserIsBlockedQuery, ICheckUsernameIsValidQuery checkUsernameIsValidQuery,
+        IUpdateTlgUserCommand updateTlgUserCommand)
     {
         _getDatingUserQuery = getDatingUserQuery;
         _blockDatingUserCommand = blockDatingUserCommand;
         _getUsernameTlgUserQuery = getUsernameTlgUserQuery;
         _checkDatingUserIsBlockedQuery = checkDatingUserIsBlockedQuery;
+        _checkUsernameIsValidQuery = checkUsernameIsValidQuery;
+        _updateTlgUserCommand = updateTlgUserCommand;
     }
 
     public override char CallbackDataCode => 'y';
@@ -94,7 +101,11 @@ public class ChatRequestCallbackCommand : BaseCallbackCommand
 
                         return;
                     }
-                    
+
+                    bool usernameIsvalid = await _checkUsernameIsValidQuery.CheckUsernameIsValidAsync(chatId, username);
+
+                    if (usernameIsvalid == false) await _updateTlgUserCommand.UpdateTlgUsernameAsync(chatId, username);
+
                     long interlocutorChatId = GetChatIdForUnlockUser(data);
 
                     string? interlocutorUsername = await _getUsernameTlgUserQuery
