@@ -12,11 +12,7 @@ public interface IMemoryCachService
 
     void SetMemoryCach(long chatId, long requestChatId);
 
-    void SetInterlocutorChatIdInMemoryCach(long chatId, long interlocutorChatId);
-
     bool SetRequestCountInMemoryCach(long chatId);
-
-    public void SetChatingState(long chatId, long interlocutorChatId);
 
     DatingUserDto GetDatingUserDtoFromMemoryCach(long chatId);
 
@@ -33,10 +29,4 @@ public interface IMemoryCachService
     Photo GetCurrentPhotoToGoBackFromMemoryCach(long chatId);
 
     List<long>? GetChatIdOfCompletedRequestsFromMemoryCach(long chatId);
-
-    long GetInterlocutorChatIdFromMemoryCach(long chatId);
-
-    string? GetChatingState(long chatId);
-
-
 }
