@@ -54,7 +54,7 @@ public static class ConfigureService
         services.AddScoped<BaseCallbackCommand, DatingCallbackCommand>();
         services.AddScoped<BaseCallbackCommand, StartDatingCallbackCommandcs>();
         services.AddScoped<BaseCallbackCommand, PhotoForDatingCallbackCommand>();
-        services.AddScoped<BaseCallbackCommand, RequestAChatCallbackCommand>();
+        services.AddScoped<BaseCallbackCommand, ChatRequestCallbackCommand>();
         services.AddScoped<BaseCallbackCommand, StiTestCallbackCommand>();
 
         return services;

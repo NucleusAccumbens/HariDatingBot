@@ -2,33 +2,29 @@
 
 namespace EblanistsDatingBot.Messages.UserMessages;
 
-public class RequestAChatMessage : BaseMessage
+public class ChatRequestMessage : BaseMessage
 {
     private readonly ProfileStringBuilder _stringBuilder;
 
     private readonly DatingUserDto _userDto;
 
-    private readonly long _chatId;
-
     private readonly bool _isBlocked;
 
-    public RequestAChatMessage(DatingUserDto datingUserDto, long chatId, bool IsBlocked)
+    public ChatRequestMessage(DatingUserDto datingUserDto, bool IsBlocked)
     {
         _userDto = datingUserDto;
         _stringBuilder = new(_userDto);
-        _chatId = chatId;
         _isBlocked = IsBlocked;
     }
 
     public override string MessageText =>
         $"<b>this person wants to start a dialogue with you. " +
-        $"you can only chat with one person at a time.\n" +
-        $"you can go to the dialogue at any time, " +
-        $"the application is saved. to view the application, " +
-        $"use the command  /requests</b>\n\n" +
+        $"you can go to the dialogue at any time, the request is saved. " +
+        $"to view all requests, use the /requests command. " +
+        $"if you accept the request, i'll link your usernames</b>\n\n" +
         $"{_stringBuilder.GetProfileInfo()}";
 
-    public override InlineKeyboardMarkup InlineKeyboardMarkup => GetInlineKeyboardMarkup(_chatId);
+    public override InlineKeyboardMarkup InlineKeyboardMarkup => GetInlineKeyboardMarkup(_userDto.ChatId);
 
     private InlineKeyboardMarkup GetInlineKeyboardMarkup(long chatId)
     {
@@ -43,7 +39,7 @@ public class RequestAChatMessage : BaseMessage
                 },
                 new[]
                 {
-                    InlineKeyboardButton.WithCallbackData(text: "🔘 send a message", callbackData: $"ySendAMessage{chatId}")
+                    InlineKeyboardButton.WithCallbackData(text: "🔘 accept request", callbackData: $"yAccept{chatId}")
                 },
             });
         }
@@ -56,7 +52,7 @@ public class RequestAChatMessage : BaseMessage
             },
             new[]
             {
-                InlineKeyboardButton.WithCallbackData(text: "🔘 send a message", callbackData: $"ySendAMessage{chatId}")
+                InlineKeyboardButton.WithCallbackData(text: "🔘 accept request", callbackData: $"yAccept{chatId}")
             },
         });
     }

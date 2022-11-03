@@ -1,5 +1,4 @@
-﻿using EblanistsDatingBot.Common.Interfaces;
-using EblanistsDatingBot.Common.Services;
+﻿using EblanistsDatingBot.Common.Services;
 using EblanistsDatingBot.Messages.UserMessages;
 
 namespace EblanistsDatingBot.Commands.UserCommands.CallbackUserCommands;

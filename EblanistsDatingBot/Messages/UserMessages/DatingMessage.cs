@@ -11,10 +11,10 @@ public class DatingMessage : BaseMessage
 
     public override string MessageText =>
         "🔸 you can send up to 12 dialogue requests per day\n\n" +
-        "🔸 you can chat with only one user at a time\n\n" +
-        "🔸 you can block unwanted interlocutors\n\n" +
+        "🔸 you can block unwanted chat requests\n\n" +
         "🔸 after passing the test for knowledge of STIs " +
-        "you will have access to the search by parameters\n\n" +
+        "you will be able to search by 12 profile parameters " +
+        "and use the anonymous dating function\n\n" +
         "to start viewing profiles, click <b>\"start dating\"</b>";
 
     public override InlineKeyboardMarkup InlineKeyboardMarkup => GetInlineKeyboardMarkup();

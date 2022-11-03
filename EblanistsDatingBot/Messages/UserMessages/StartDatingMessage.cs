@@ -18,7 +18,8 @@ public class StartDatingMessage : BaseMessage
     }
 
     public override string MessageText => 
-        $"user number: {_userDto.Id}\n\n{_stringBuilder.GetProfileInfo()}";
+        $"person number {_userDto.Id}\n\n<b>if this person approves your request, i'll link your usernames</b>" +
+        $"\n\n{_stringBuilder.GetProfileInfo()}";
 
     public override InlineKeyboardMarkup InlineKeyboardMarkup => GetInlineKeyboardMarkup(_chatId);
 

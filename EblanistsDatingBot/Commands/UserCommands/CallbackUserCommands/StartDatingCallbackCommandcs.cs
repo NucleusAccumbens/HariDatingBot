@@ -1,4 +1,3 @@
-﻿using Application.BlockedUsers.Queries;
 using Application.Photos.Interfaces;
 using Application.Requests.Interfaces;
 using EblanistsDatingBot.Common.Services;
@@ -8,9 +7,13 @@ namespace EblanistsDatingBot.Commands.UserCommands.CallbackUserCommands;
 
 public class StartDatingCallbackCommandcs : BaseCallbackCommand
 {
-    private RequestAChatMessage _chatMessage;
+    private ChatRequestMessage _chatRequestMessage;
     
     private readonly string _allert = "there are no photos in this profile";
+
+    private readonly string _usernameIsNull = 
+        "there is no username in your telegram profile, the person will not be able to contact you. " +
+        "add a username to send a chat request";
 
     private readonly InlineKeyboardMarkup _keyboardMarkup = new(new[]
     {
@@ -109,7 +112,9 @@ public class StartDatingCallbackCommandcs : BaseCallbackCommand
                     return;
                 }
                 if (data.Contains("wRequestAChat"))
-                {                 
+                {
+                    string? username = update.CallbackQuery.Message.Chat.Username;
+
                     var user = await _getDatingUserQuery.GetDatingUserAsync(chatId);
 
                     var chatIdOfCompletedRequests = _memoryCachService
@@ -126,6 +131,13 @@ public class StartDatingCallbackCommandcs : BaseCallbackCommand
                         return;
                     }
 
+                    if (username == null)
+                    {
+                        await MessageService.ShowAllert(callbackId, client, _usernameIsNull);
+
+                        return;
+                    }
+
                     if (user != null && chatIdOfCompletedRequests == null || 
                         user != null && chatIdOfCompletedRequests != null && !chatIdOfCompletedRequests.Contains(GetUserChatIdToRequest(data)))
                     {
@@ -133,11 +145,11 @@ public class StartDatingCallbackCommandcs : BaseCallbackCommand
 
                         if (canRequested == true)
                         {
-                            _chatMessage = new(user.Adapt<DatingUserDto>(), chatId, false);
+                            _chatRequestMessage = new(user.Adapt<DatingUserDto>(), false);
 
                             var request = await CreateRequest(GetUserChatIdToRequest(data), user);
 
-                            await _chatMessage.SendMessage(GetUserChatIdToRequest(data), client);
+                            await _chatRequestMessage.SendMessage(GetUserChatIdToRequest(data), client);
 
                             _memoryCachService.SetMemoryCach(chatId, GetUserChatIdToRequest(data));
 

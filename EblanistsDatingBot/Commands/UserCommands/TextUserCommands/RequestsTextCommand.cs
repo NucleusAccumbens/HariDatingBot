@@ -1,4 +1,4 @@
-﻿using EblanistsDatingBot.Common.Services;
+using EblanistsDatingBot.Common.Services;
 using EblanistsDatingBot.Messages.UserMessages;
 
 namespace EblanistsDatingBot.Commands.UserCommands.TextUserCommands;
@@ -9,7 +9,7 @@ public class RequestsTextCommand : BaseTextCommand
 
     private readonly ICheckDatingUserIsBlockedQuery _checkDatingUserIsBlockedQuery;
 
-    private RequestAChatMessage _requestAChatMessage;
+    private ChatRequestMessage _requestAChatMessage;
 
     private readonly string _text = "you don't have any chat requests yet";
 
@@ -46,8 +46,7 @@ public class RequestsTextCommand : BaseTextCommand
                             .CheckDatingUserIsBlockedAsync(request.DatingUser.ChatId, chatId);
 
                         _requestAChatMessage =
-                            new(request.DatingUser.Adapt<DatingUserDto>(),
-                            request.DatingUser.ChatId, isBlocked);
+                            new(request.DatingUser.Adapt<DatingUserDto>(), isBlocked);
 
                         await _requestAChatMessage.SendMessage(chatId, client);
                     }

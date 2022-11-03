@@ -1,5 +1,4 @@
-﻿using EblanistsDatingBot.Common.Interfaces;
-using EblanistsDatingBot.Common.Services;
+﻿using EblanistsDatingBot.Common.Services;
 using EblanistsDatingBot.Messages.UserMessages;
 
 namespace EblanistsDatingBot.Commands.UserCommands.CallbackUserCommands;
@@ -7,8 +6,9 @@ namespace EblanistsDatingBot.Commands.UserCommands.CallbackUserCommands;
 public class ChildfreeCallbackCommand : BaseCallbackCommand
 {
     private readonly string _info =
-        "childfree is a refusal to reproduce\n\n" +
-        "childfree can have natural and adopted children";
+        "childfree is a refusal to reproduce\n" +
+        "childfree can have natural and adopted children\n\n" +
+        "i recommend the book <b>\"better never be: the harm of arising\"</b> by <b>david benatar</b>";
 
     private readonly string _messageText = "are you a cosmopolitan?";
 

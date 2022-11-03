@@ -167,6 +167,16 @@ public class MemoryCachService : IMemoryCachService
         else throw new MemoryCachException();
     }
 
+    public string? GetChatingState(long chatId)
+    {
+        if (_memoryCach.Get(chatId + 13) is not null and string)
+        {
+            return (string)_memoryCach.Get(chatId + 13);
+        }
+
+        else return null;
+    }
+
     public void SetMemoryCach(long chatId, DatingUserDto datingUserDto)
     {
         _memoryCach.Set(chatId + 1, datingUserDto,
@@ -315,6 +325,23 @@ public class MemoryCachService : IMemoryCachService
     }
 
     public void SetInterlocutorChatIdInMemoryCach(long chatId, long interlocutorChatId)
+    {      
+        SetChatingState(chatId, interlocutorChatId);
+        
+        _memoryCach.Set(chatId + 12, interlocutorChatId,
+            new MemoryCacheEntryOptions
+            {
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromDays(30)
+            });
+
+        _memoryCach.Set(interlocutorChatId + 12, chatId,
+            new MemoryCacheEntryOptions
+            {
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromDays(30)
+            });
+    }
+
+    public void SetChatingState(long chatId, long interlocutorChatId)
     {
         _memoryCach.Set(chatId + 2, "chating",
             new MemoryCacheEntryOptions
@@ -325,19 +352,7 @@ public class MemoryCachService : IMemoryCachService
         _memoryCach.Set(interlocutorChatId + 2, "chating",
             new MemoryCacheEntryOptions
             {
-                AbsoluteExpirationRelativeToNow = TimeSpan.FromDays(365)
-            });
-
-        _memoryCach.Set(chatId + 12, interlocutorChatId,
-            new MemoryCacheEntryOptions
-            {
-                AbsoluteExpirationRelativeToNow = TimeSpan.FromDays(365)
-            });
-
-        _memoryCach.Set(interlocutorChatId + 12, chatId,
-            new MemoryCacheEntryOptions
-            {
-                AbsoluteExpirationRelativeToNow = TimeSpan.FromDays(365)
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromDays(30)
             });
     }
 }

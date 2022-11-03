@@ -14,7 +14,9 @@ public class CreateRequestCommand : ICreateRequestCommand
     public async Task CreateRequestAsync(Request request)
     {
         var entity = await _context.Requests
-            .SingleOrDefaultAsync(e => e.DatingUserId == request.DatingUserId);
+            .Where(e => e.ChatId == request.ChatId)
+            .Where(e => e.DatingUserId == request.DatingUserId)
+            .SingleOrDefaultAsync();
 
         if (entity == null)
         {

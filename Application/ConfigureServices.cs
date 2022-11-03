@@ -36,6 +36,7 @@ public static class ConfigureServices
         services.AddScoped<IBlockDatingUserCommand, BlockDatingUserCommand>();
         services.AddScoped<ICheckDatingUserIsBlockedQuery, CheckDatingUserIsBlockedQuery>();
         services.AddScoped<IKickTlgUserCommand, KickTlgUserCommand>();
+        services.AddScoped<IGetUsernameTlgUserQuery, GetUsernameTlgUserQuery>();
   
         return services;
     }

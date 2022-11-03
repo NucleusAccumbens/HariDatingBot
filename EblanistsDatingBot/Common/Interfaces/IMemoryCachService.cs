@@ -16,6 +16,8 @@ public interface IMemoryCachService
 
     bool SetRequestCountInMemoryCach(long chatId);
 
+    public void SetChatingState(long chatId, long interlocutorChatId);
+
     DatingUserDto GetDatingUserDtoFromMemoryCach(long chatId);
 
     string? GetCommandStateFromMemoryCach(long chatId);
@@ -33,5 +35,8 @@ public interface IMemoryCachService
     List<long>? GetChatIdOfCompletedRequestsFromMemoryCach(long chatId);
 
     long GetInterlocutorChatIdFromMemoryCach(long chatId);
-  
+
+    string? GetChatingState(long chatId);
+
+
 }
