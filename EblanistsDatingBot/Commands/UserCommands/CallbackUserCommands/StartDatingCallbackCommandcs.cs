@@ -69,7 +69,7 @@ public class StartDatingCallbackCommandcs : BaseCallbackCommand
             string callbackId = update.CallbackQuery.Id;
 
             var users = await _getDatingUserQuery
-                .GetAllDatingUsersAsync();
+                .GetAllDatingUsersAsync(chatId);
 
             try
             {

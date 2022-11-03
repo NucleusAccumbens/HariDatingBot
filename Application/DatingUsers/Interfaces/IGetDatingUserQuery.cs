@@ -7,4 +7,6 @@ public interface IGetDatingUserQuery
     Task<DatingUser?> GetDatingUserAsync(long chatId);
 
     Task<List<DatingUser>> GetAllDatingUsersAsync();
+
+    Task<List<DatingUser>> GetAllDatingUsersAsync(long chatId);
 }
