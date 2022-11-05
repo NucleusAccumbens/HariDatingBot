@@ -14,6 +14,7 @@ public class GetDatingUserQuery : IGetDatingUserQuery
     public async Task<List<DatingUser>> GetAllDatingUsersAsync()
     {
         return await _context.DatingUsers
+            .Where(u => u.IsKicked == false)
             .ToListAsync();
     }
 

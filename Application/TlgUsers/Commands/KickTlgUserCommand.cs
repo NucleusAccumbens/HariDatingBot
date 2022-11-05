@@ -31,25 +31,17 @@ public class KickTlgUserCommand : IKickTlgUserCommand
         var tlgUser = await _context.TlgUsers
             .SingleOrDefaultAsync(u => u.ChatId == chatId);
 
-        if (tlgUser != null)
-        {
-            if (tlgUser.IsKicked == false)
-            {
-                await ChangeTlgUserIsKickedValues(tlgUser, true);
+        var datingUser = await _context.DatingUsers
+            .SingleOrDefaultAsync(u => u.ChatId == chatId);
 
-                return;
-            }
-            if (tlgUser.IsKicked == true)
-            {
-                await ChangeTlgUserIsKickedValues(tlgUser, false);
-            }
+        if (tlgUser != null && datingUser != null)
+        {
+            tlgUser.IsKicked = !tlgUser.IsKicked;
+
+            datingUser.IsKicked = !datingUser.IsKicked;
+
+            await _context.SaveChangesAsync();
         }
     }
 
-    private async Task ChangeTlgUserIsKickedValues(TlgUser tlgUser, bool value)
-    {
-        tlgUser.IsKicked = value;
-
-        await _context.SaveChangesAsync();
-    }
 }

@@ -6,8 +6,8 @@ namespace EblanistsDatingBot.Commands.UserCommands.TextUserCommands;
 
 public class ViewPhotosTextCommand : BaseTextCommand
 {
-    private readonly string _noProfileMessage = 
-        "you have not created a profile yet. click /start to register";
+    private readonly string _noProfileMessage =
+        "you haven't created a profile yet.  click /start to register";
 
     private readonly string _allert = "there are no photos in your profile";
 

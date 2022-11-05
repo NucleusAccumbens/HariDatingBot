@@ -2,7 +2,7 @@
 
 public class AgeMessage : BaseMessage
 {
-    public override string MessageText => "are you 18 or older?";
+    public override string MessageText => "you must be 18 years of age or older to enter. are you 18+?";
 
     public override InlineKeyboardMarkup InlineKeyboardMarkup => new(new[]
     {

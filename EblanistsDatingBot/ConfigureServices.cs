@@ -3,6 +3,7 @@ using EblanistsDatingBot.Commands.GeneralCommands.CallbackGeneralCommands;
 using EblanistsDatingBot.Commands.GeneralCommands.TextGeneralCommands;
 using EblanistsDatingBot.Commands.UserCommands;
 using EblanistsDatingBot.Commands.UserCommands.CallbackUserCommands;
+using EblanistsDatingBot.Commands.UserCommands.CallbackUserCommands.AnswersCallbackCommands;
 using EblanistsDatingBot.Commands.UserCommands.TextUserCommands;
 using EblanistsDatingBot.Common;
 using EblanistsDatingBot.Common.Abstractions;
@@ -29,6 +30,7 @@ public static class ConfigureService
         services.AddScoped<BaseTextCommand, FeedbackTextCommand>();
         services.AddScoped<BaseTextCommand, DeleteTextCommand>();
         services.AddScoped<BaseTextCommand, HelpTextCommand>();
+        services.AddScoped<BaseTextCommand, AboutHariTextCommand>();
         services.AddScoped<BaseCallbackCommand, RegisterCallbackCommand>();
         services.AddScoped<BaseCallbackCommand, VeganCallbackCommand>();
         services.AddScoped<BaseCallbackCommand, NoncredistCallbackCommand>();
@@ -51,7 +53,6 @@ public static class ConfigureService
         services.AddScoped<BaseCallbackCommand, PhotoCallbackCommand>();
         services.AddScoped<BaseCallbackCommand, VerifidePhotoCallbackCommand>();
         services.AddScoped<BaseCallbackCommand, ViewPhotosCallbackCommand>();
-        services.AddScoped<BaseCallbackCommand, ManagePhotoCallbackCommand>();
         services.AddScoped<BaseCallbackCommand, DatingCallbackCommand>();
         services.AddScoped<BaseCallbackCommand, StartDatingCallbackCommandcs>();
         services.AddScoped<BaseCallbackCommand, PhotoForDatingCallbackCommand>();

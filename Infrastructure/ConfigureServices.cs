@@ -16,7 +16,7 @@ public static class ConfigureService
         if (configuration.GetValue<bool>("InDeveloping"))
         {
             services.AddDbContext<DatingBotDbCotext>(optionBuilder =>
-            optionBuilder.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+            optionBuilder.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
         }
         else
         {

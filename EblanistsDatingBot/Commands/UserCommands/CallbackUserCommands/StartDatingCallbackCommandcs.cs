@@ -16,7 +16,7 @@ public class StartDatingCallbackCommandcs : BaseCallbackCommand
         "add a username to send a chat request";
 
     private readonly string _noProfileMessage =
-        "you have not created a profile yet. click /start to register";
+        "you haven't created a profile yet. click /start to register";
 
 
     private readonly InlineKeyboardMarkup _keyboardMarkup = new(new[]

@@ -3,7 +3,6 @@ using Domain.Enums;
 using EblanistsDatingBot.Common.Services;
 using EblanistsDatingBot.Messages.AdminMessage;
 using EblanistsDatingBot.Messages.UserMessages;
-using Telegram.Bot.Types;
 
 namespace EblanistsDatingBot.Commands.UserCommands.TextUserCommands;
 

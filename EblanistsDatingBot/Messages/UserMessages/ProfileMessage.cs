@@ -38,7 +38,10 @@ public class ProfileMessage : BaseMessage
     {
         string progressBar = String.Empty;
 
-        if (_userDto.OtherInfo == null  || _userDto.OtherInfo == String.Empty &&
+        if (_userDto.OtherInfo == null  &&
+            _userDto.PassedTheStiTest == false &&
+            _userDto.HasPhotos == false ||
+            _userDto.OtherInfo == String.Empty &&
             _userDto.PassedTheStiTest == false &&
             _userDto.HasPhotos == false) progressBar += _progressBarToThirtyPercent;
 

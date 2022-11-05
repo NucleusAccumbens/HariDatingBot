@@ -6,7 +6,7 @@ namespace EblanistsDatingBot.Commands.UserCommands.TextUserCommands;
 public class RequestsTextCommand : BaseTextCommand
 {
     private readonly string _noProfileMessage =
-    "you have not created a profile yet. click /start to register";
+    "you haven't created a profile yet.  click /start to register";
 
     private readonly IGetDatingUserRequestsQuery _getDatingUserRequestsQuery;
 

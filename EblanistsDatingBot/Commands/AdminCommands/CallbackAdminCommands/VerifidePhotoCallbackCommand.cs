@@ -11,6 +11,8 @@ public class VerifidePhotoCallbackCommand : BaseCallbackCommand
     private readonly string _userAlertPhoto =
         "photo not verified";
 
+    private readonly string _userIsntInDb = "пользователь удалил профиль";
+
     private readonly InlineKeyboardMarkup _inlineKeyboardMarkup = new(new[]
     {
         new[]
@@ -27,8 +29,10 @@ public class VerifidePhotoCallbackCommand : BaseCallbackCommand
 
     private readonly ICheckUserHasPhotosQuery _checkUserHasPhotosQuery;
 
+
     public VerifidePhotoCallbackCommand(IUpdatePhotoCommand updatePhotoCommand, 
-        IDeletePhotoCommand deletePhotoCommand, IUpdateDatingUserCommand updateDatingUserCommand, ICheckUserHasPhotosQuery checkUserHasPhotosQuery)
+        IDeletePhotoCommand deletePhotoCommand, IUpdateDatingUserCommand updateDatingUserCommand, 
+        ICheckUserHasPhotosQuery checkUserHasPhotosQuery)
     {
         _updatePhotoCommand = updatePhotoCommand;
         _deletePhotoCommand = deletePhotoCommand;
@@ -52,23 +56,31 @@ public class VerifidePhotoCallbackCommand : BaseCallbackCommand
 
             if (data.Contains("tYes"))
             {
-                bool hasPhoto = await _checkUserHasPhotosQuery.CheckUserHasPhotosAsync(chatId);
-
-                if (!hasPhoto)
-                {
-                    await _updateDatingUserCommand.UpdateDatingUserHasAPhotoAsync(chatId);
-                }                
-                
                 long userChatId = await _updatePhotoCommand
                     .UpdarePhotoIsVerifideAsync(GetPhotoIdToYes(data));
-                
-                await MessageService.ShowAllert(callbackId, client, 
-                    "фото верефицировано и появится в профиле пользователя");
-                
-                await MessageService.DeleteMessage(chatId, messageId, client);
 
-                await MessageService.SendMessage(userChatId, client, _userAlertPhotoIsVerifide, 
-                    _inlineKeyboardMarkup);
+                if (userChatId != 0)
+                {
+
+                    bool hasPhoto = await _checkUserHasPhotosQuery.CheckUserHasPhotosAsync(userChatId);
+
+                    if (!hasPhoto)
+                    {
+                        await _updateDatingUserCommand.UpdateDatingUserHasAPhotoAsync(userChatId);
+                    }
+
+                    await MessageService.ShowAllert(callbackId, client,
+                        "фото верефицировано и появится в профиле пользователя");
+
+                    await MessageService.DeleteMessage(chatId, messageId, client);
+
+                    await MessageService.SendMessage(userChatId, client, _userAlertPhotoIsVerifide,
+                        _inlineKeyboardMarkup);
+
+                    return;
+                }
+
+                else await MessageService.ShowAllert(callbackId, client, _userIsntInDb);
 
                 return;
             }
@@ -77,12 +89,17 @@ public class VerifidePhotoCallbackCommand : BaseCallbackCommand
                 long userChatId = await _deletePhotoCommand
                     .DeletePhotoAsync(GetPhotoIdToNo(data));
 
-                await MessageService.ShowAllert(callbackId, client,
-                    "фото удалено из базы данных");
+                if (userChatId != 0)
+                {
+                    await MessageService.ShowAllert(callbackId, client,
+                        "фото удалено из базы данных");
 
-                await MessageService.DeleteMessage(chatId, messageId, client);
+                    await MessageService.DeleteMessage(chatId, messageId, client);
 
-                await MessageService.SendMessage(userChatId, client, _userAlertPhoto, null);                   
+                    await MessageService.SendMessage(userChatId, client, _userAlertPhoto, null);
+                }
+
+                else await MessageService.ShowAllert(callbackId, client, _userIsntInDb);
             }
         }
     }

@@ -8,7 +8,7 @@ public class HelpTextCommand : BaseTextCommand
     private readonly HelpMessage _helpMessage = new();
 
     private readonly string _noProfileMessage =
-        "you have not created a profile yet. click /start to register";
+        "you haven't created a profile yet.  click /start to register";
 
     private readonly ICheckUserIsInDbQuery _checkUserIsInDbQuery;
 

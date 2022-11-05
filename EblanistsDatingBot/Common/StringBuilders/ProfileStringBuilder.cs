@@ -17,13 +17,13 @@ public class ProfileStringBuilder
 
         if (_userDto.IsVegan == false) profileInfo += "i'm not a vegan\n";
 
-        if (_userDto.IsBeliever == true) profileInfo += "i believe in something\n";
-
-        if (_userDto.IsBeliever == false) profileInfo += "i don't believe in anything\n";
-
         if (_userDto.IsChildfree == true) profileInfo += "i'm childfree\n";
 
         if (_userDto.IsChildfree == false) profileInfo += "i'm not childfree\n";
+
+        if (_userDto.IsBeliever == true) profileInfo += "i believe in something\n";
+
+        if (_userDto.IsBeliever == false) profileInfo += "i don't believe in anything\n";
 
         if (_userDto.IsCosmopolitan == true) profileInfo += "i'm cosmopolitan\n";
 

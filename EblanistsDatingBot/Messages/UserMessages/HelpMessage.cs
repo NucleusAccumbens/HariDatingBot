@@ -16,7 +16,7 @@ public class HelpMessage : BaseMessage
     {
         new[]
         {
-            InlineKeyboardButton.WithUrl(text: "write to support 💬", url: "http://t.me/noncredist")
+            InlineKeyboardButton.WithUrl(text: "write to support 💬", url: "http://t.me/hari_admin")
         },
     });
 }
