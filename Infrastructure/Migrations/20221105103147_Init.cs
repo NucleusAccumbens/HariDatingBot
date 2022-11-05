@@ -1,6 +1,5 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
@@ -15,10 +14,10 @@ namespace Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     UserChatId = table.Column<long>(type: "bigint", nullable: false),
                     BlockedUserChatId = table.Column<long>(type: "bigint", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false)
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -30,26 +29,27 @@ namespace Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     ChatId = table.Column<long>(type: "bigint", nullable: false),
-                    IsVegan = table.Column<bool>(type: "boolean", nullable: true),
-                    IsBeliever = table.Column<bool>(type: "boolean", nullable: true),
-                    IsChildfree = table.Column<bool>(type: "boolean", nullable: true),
-                    IsCosmopolitan = table.Column<bool>(type: "boolean", nullable: true),
-                    IsBdsmLover = table.Column<bool>(type: "boolean", nullable: true),
-                    IsMakeupUser = table.Column<bool>(type: "boolean", nullable: true),
-                    IsHeelsUser = table.Column<bool>(type: "boolean", nullable: true),
-                    IsTattooed = table.Column<bool>(type: "boolean", nullable: true),
-                    IsExistLover = table.Column<bool>(type: "boolean", nullable: true),
-                    ShaveLegs = table.Column<bool>(type: "boolean", nullable: true),
-                    ShaveHead = table.Column<bool>(type: "boolean", nullable: true),
-                    HaveSacred = table.Column<bool>(type: "boolean", nullable: true),
-                    OtherInfo = table.Column<string>(type: "text", nullable: true),
-                    PassedTheStiTest = table.Column<bool>(type: "boolean", nullable: false),
-                    HasPhotos = table.Column<bool>(type: "boolean", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
-                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    LastModified = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                    IsVegan = table.Column<bool>(type: "bit", nullable: true),
+                    IsBeliever = table.Column<bool>(type: "bit", nullable: true),
+                    IsChildfree = table.Column<bool>(type: "bit", nullable: true),
+                    IsCosmopolitan = table.Column<bool>(type: "bit", nullable: true),
+                    IsBdsmLover = table.Column<bool>(type: "bit", nullable: true),
+                    IsMakeupUser = table.Column<bool>(type: "bit", nullable: true),
+                    IsHeelsUser = table.Column<bool>(type: "bit", nullable: true),
+                    IsTattooed = table.Column<bool>(type: "bit", nullable: true),
+                    IsExistLover = table.Column<bool>(type: "bit", nullable: true),
+                    ShaveLegs = table.Column<bool>(type: "bit", nullable: true),
+                    ShaveHead = table.Column<bool>(type: "bit", nullable: true),
+                    HaveSacred = table.Column<bool>(type: "bit", nullable: true),
+                    OtherInfo = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PassedTheStiTest = table.Column<bool>(type: "bit", nullable: false),
+                    HasPhotos = table.Column<bool>(type: "bit", nullable: false),
+                    IsKicked = table.Column<bool>(type: "bit", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LastModified = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -61,15 +61,15 @@ namespace Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    BodyPart = table.Column<int>(type: "integer", nullable: false),
-                    PathToPhoto = table.Column<string>(type: "text", nullable: false),
-                    IsVerified = table.Column<bool>(type: "boolean", nullable: false),
-                    IsAvatar = table.Column<bool>(type: "boolean", nullable: false),
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    BodyPart = table.Column<int>(type: "int", nullable: false),
+                    PathToPhoto = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsVerified = table.Column<bool>(type: "bit", nullable: false),
+                    IsAvatar = table.Column<bool>(type: "bit", nullable: false),
                     ChatId = table.Column<long>(type: "bigint", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
-                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    LastModified = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LastModified = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -81,14 +81,14 @@ namespace Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     ChatId = table.Column<long>(type: "bigint", nullable: false),
-                    Username = table.Column<string>(type: "text", nullable: true),
-                    IsAdmin = table.Column<bool>(type: "boolean", nullable: false),
-                    IsKicked = table.Column<bool>(type: "boolean", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
-                    Created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    LastModified = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                    Username = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsAdmin = table.Column<bool>(type: "bit", nullable: false),
+                    IsKicked = table.Column<bool>(type: "bit", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LastModified = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -100,11 +100,11 @@ namespace Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     ChatId = table.Column<long>(type: "bigint", nullable: false),
                     DatingUserId = table.Column<long>(type: "bigint", nullable: false),
-                    IsBlocked = table.Column<bool>(type: "boolean", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false)
+                    IsBlocked = table.Column<bool>(type: "bit", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {

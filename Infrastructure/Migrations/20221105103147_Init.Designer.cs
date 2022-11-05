@@ -12,14 +12,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(DatingBotDbCotext))]
-    [Migration("20221031075945_BlockedUsers")]
-    partial class BlockedUsers
+    [Migration("20221105103147_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.9")
+                .HasAnnotation("ProductVersion", "6.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -85,6 +85,9 @@ namespace Infrastructure.Migrations
                         .HasColumnType("bit");
 
                     b.Property<bool?>("IsHeelsUser")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsKicked")
                         .HasColumnType("bit");
 
                     b.Property<bool?>("IsMakeupUser")
@@ -201,6 +204,9 @@ namespace Infrastructure.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("IsKicked")
+                        .HasColumnType("bit");
+
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime2");
 
@@ -219,6 +225,7 @@ namespace Infrastructure.Migrations
                             Created = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsAdmin = true,
                             IsDeleted = false,
+                            IsKicked = false,
                             Username = "noncredistka"
                         });
                 });
