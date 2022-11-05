@@ -6,8 +6,6 @@ using EblanistsDatingBot.Commands.UserCommands.CallbackUserCommands;
 using EblanistsDatingBot.Commands.UserCommands.CallbackUserCommands.AnswersCallbackCommands;
 using EblanistsDatingBot.Commands.UserCommands.TextUserCommands;
 using EblanistsDatingBot.Common;
-using EblanistsDatingBot.Common.Abstractions;
-using EblanistsDatingBot.Common.Interfaces;
 using EblanistsDatingBot.Common.Services;
 
 namespace Microsoft.Extensions.DependencyInjection;
