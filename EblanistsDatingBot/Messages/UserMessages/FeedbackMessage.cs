@@ -9,7 +9,7 @@ public class FeedbackMessage : BaseMessage
     {
         new[]
         {
-            InlineKeyboardButton.WithUrl(text: "feedback 💬", url: "http://t.me/hari_admin")
+            InlineKeyboardButton.WithUrl(text: "feedback 💬", url: "http://t.me/etorono")
         },
     });
 }

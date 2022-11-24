@@ -21,6 +21,7 @@ public class GetDatingUserQuery : IGetDatingUserQuery
     public async Task<List<DatingUser>> GetAllDatingUsersAsync(long chatId)
     {
         return await _context.DatingUsers
+            .Where(u => u.IsKicked == false)
             .Where(u => u.ChatId != chatId)
             .ToListAsync();
     }

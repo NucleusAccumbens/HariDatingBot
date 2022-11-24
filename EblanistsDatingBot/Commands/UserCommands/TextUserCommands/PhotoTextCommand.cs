@@ -144,7 +144,7 @@ public class PhotoTextCommand : BaseTextCommand
         {
             ChatId = chatId,
             BodyPart = bodyParts,
-            PathToPhoto = path,
+            PathToPhoto = path,            
         };
 
         return await _createPhotoCommand.CreatePhotoAsync(photo.Adapt<Photo>());

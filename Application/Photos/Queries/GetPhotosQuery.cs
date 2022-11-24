@@ -23,6 +23,7 @@ public class GetPhotosQuery : IGetPhotosQuery
     {
         return await _context.Photos
             .Where(ph => ph.ChatId == chatId)
+            .Where(ph => ph.IsVerified == true)
             .ToListAsync();
     }
 }
